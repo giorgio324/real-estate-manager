@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 const RootLayout = () => {
   return (
     <>
-      <div className='px-[162px] py-[38px]'>
+      <div className='px-[162px] py-[38px] border-b border-border'>
         <img src={logo} alt='Redberry Logo' />
       </div>
       <main className='px-[162px]'>
