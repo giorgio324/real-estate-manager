@@ -1,15 +1,17 @@
 import logo from '../assets/images/HeaderLogo.png';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 const RootLayout = () => {
   return (
     <>
-      <div className='px-[162px] py-[38px] border-b border-border'>
-        <img src={logo} alt='Redberry Logo' />
-      </div>
-      <main className='px-[162px]'>
+      <nav className='px-[162px] py-[38px] border-b border-border'>
+        <Link to={'/'}>
+          <img src={logo} alt='Redberry Logo' />
+        </Link>
+      </nav>
+      <div className='px-[162px]'>
         <Outlet />
-      </main>
+      </div>
     </>
   );
 };

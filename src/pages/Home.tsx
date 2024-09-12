@@ -1,4 +1,11 @@
+import Filters from '../components/Filters/Filters';
+
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div className='mt-[77px]'>
+      <Filters />
+      <main>cards</main>
+    </div>
+  );
 };
 export default Home;
