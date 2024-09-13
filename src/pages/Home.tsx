@@ -1,4 +1,4 @@
-import Filters from '../components/Filters/Filters';
+import Filters from '../components/Filters';
 
 const Home = () => {
   return (
