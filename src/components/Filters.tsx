@@ -2,8 +2,13 @@ import { useFetch } from '../hooks/useFetch';
 import Checkbox from './checkbox/Checkbox';
 import Dropdown from './dropdown/Dropdown';
 
+type Region = {
+  id: number;
+  name: string;
+};
+
 const Filters = () => {
-  const { data, error, isLoading } = useFetch('/regions');
+  const { data, error, isLoading } = useFetch<Region[]>('/regions');
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;

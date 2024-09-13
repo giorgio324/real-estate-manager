@@ -5,8 +5,8 @@ const BASE_API_URL =
 
 const TOKEN = '9cfee65c-3590-420c-8e46-7914f73113b5';
 
-export const useFetch = (endpoint: string) => {
-  const [data, setData] = useState<any>(null);
+export const useFetch = <T,>(endpoint: string) => {
+  const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ export const useFetch = (endpoint: string) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const result = await response.json();
+        const result: T = await response.json(); // Cast response to generic type
 
         if (!waitingRequestToFinish) {
           setData(result);
