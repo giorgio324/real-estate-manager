@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import DropdownButton from './DropdownButton';
 import DropdownHeader from './DropdownHeader';
 import DropdownBody from './DropdownBody';
+import DropdownFooter from './DropdownFooter';
 
 type DropdownProps = {
   buttonTitle: string;
@@ -46,6 +47,7 @@ const Dropdown = ({ buttonTitle, headerTitle, children }: DropdownProps) => {
           >
             <DropdownHeader title={headerTitle} />
             {children}
+            <DropdownFooter onClick={() => console.log('click')} />
           </DropdownBody>,
           document.body
         )}
