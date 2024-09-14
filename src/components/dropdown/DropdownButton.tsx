@@ -1,5 +1,6 @@
 import upIcon from '../../assets/images/DropdownIconUp.svg';
 import downIcon from '../../assets/images/DropdownIconDown.svg';
+import Button from '../button/Button';
 
 type Props = {
   isOpen: boolean;
@@ -10,11 +11,12 @@ type Props = {
 
 const DropdownButton = ({ isOpen, onClick, buttonTitle, buttonRef }: Props) => {
   return (
-    <button
+    <Button
       onClick={onClick}
-      className={`rounded-md py-2 px-3 flex justify-center items-center gap-1 transition-colors duration-200 ease-linear ${
-        isOpen ? 'bg-selected' : ''
+      className={`rounded-md py-2 px-[14px] flex justify-center items-center gap-1 text-text font-medium ${
+        isOpen ? 'bg-selected' : 'bg-transparent'
       }`}
+      type='button'
       ref={buttonRef}
     >
       {buttonTitle}
@@ -24,7 +26,7 @@ const DropdownButton = ({ isOpen, onClick, buttonTitle, buttonRef }: Props) => {
           alt={isOpen ? 'menu open icon' : 'menu closed icon'}
         />
       </span>
-    </button>
+    </Button>
   );
 };
 

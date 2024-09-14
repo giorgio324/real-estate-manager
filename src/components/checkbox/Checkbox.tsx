@@ -1,18 +1,23 @@
 interface CheckboxProps {
-  id: string;
-  label: string;
+  name: string;
+  checked: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Checkbox = ({ id, label }: CheckboxProps) => {
+const Checkbox = ({ name, onChange, checked }: CheckboxProps) => {
   return (
     <div className='flex items-center gap-2 w-[190px]'>
       <input
+        id={`checkbox-${name}`}
         type='checkbox'
         className='accent-valid text-white w-5 h-5'
-        id={id}
+        name={name}
+        value={name}
+        checked={checked}
+        onChange={onChange}
       />
-      <label htmlFor={id} className='ml-2 font-firago text-sm'>
-        {label}
+      <label htmlFor={`checkbox-${name}`} className='ml-2 font-firago text-sm'>
+        {name}
       </label>
     </div>
   );

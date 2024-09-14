@@ -10,6 +10,8 @@ export default {
         primary: '#F93B1D',
         secondary: 'rgba(2, 21, 38, 0.5)',
         text: '#021526',
+        secondaryText: 'rgba(2, 21, 38, 0.7)',
+        emptyText: 'rgba(2, 21, 38, 0.8)',
         border: '#DBDBDB',
         delete: '#676E76',
         valid: '#45A849',
