@@ -3,6 +3,20 @@
 @tailwind utilities;
 
 @font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./assets/fonts/HelveticaNeueBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./assets/fonts/HelveticaNeueMedium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Firago';
   src: url('./assets/fonts/FiraGO-Light.ttf') format('truetype');
   font-weight: 300;

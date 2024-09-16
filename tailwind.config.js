@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        helvetica: ['Helvetica Neue', 'sans-serif'],
         firago: ['Firago', 'sans-serif'],
       },
       colors: {
@@ -13,6 +14,7 @@ export default {
         text: '#021526',
         secondaryText: 'rgba(2, 21, 38, 0.7)',
         placeholder: 'rgba(2, 21, 38, 0.4)',
+        listingTitleText: '#1A1A1F',
         filterText: '#2D3648',
         silver: '#808A93',
         emptyText: 'rgba(2, 21, 38, 0.8)',

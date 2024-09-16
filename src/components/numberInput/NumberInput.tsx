@@ -26,7 +26,6 @@ const NumberInput = ({
   className,
   validateOnBlur,
   validateOnChange,
-  disabled,
 }: Props) => {
   const [touched, setTouched] = useState(false);
   const id = useId();
