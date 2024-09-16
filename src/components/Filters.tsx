@@ -4,6 +4,7 @@ import Button from './button/Button';
 import Checkbox from './checkbox/Checkbox';
 import Dropdown from './dropdown/Dropdown';
 import { useEffect, useState } from 'react';
+import NumberInput from './numberInput/NumberInput';
 
 type Region = {
   id: number;
@@ -17,8 +18,8 @@ type FilterValues = {
     checked: boolean;
   }[];
   price: {
-    min: number;
-    max: number;
+    min: number | string;
+    max: number | string;
   };
 };
 
@@ -27,8 +28,12 @@ type Props = {};
 const Filters = ({}: Props) => {
   const { data, error, isLoading } = useFetch<Region[]>('/regions');
   const [localFilters, setLocalFilters] = useState<FilterValues>({
-    price: { min: 0, max: 10000 },
+    price: { min: '', max: '' },
     region: [],
+  });
+  const [filterErrors, setFilterErrors] = useState({
+    price: false,
+    size: false,
   });
   const { filters, setFilters } = useFilter();
 
@@ -64,6 +69,14 @@ const Filters = ({}: Props) => {
     console.log(filters);
   };
 
+  const handlePriceConfirmClick = () => {
+    console.log('i run');
+    priceValidation(localFilters.price.min, localFilters.price.max);
+    if (filterErrors.price) return;
+    setFilters(localFilters);
+    localStorage.setItem('filters', JSON.stringify(localFilters));
+  };
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
@@ -73,6 +86,37 @@ const Filters = ({}: Props) => {
         region.name === name ? { ...region, checked } : region
       ),
     }));
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    priceValidation(localFilters.price.min, localFilters.price.max);
+    setLocalFilters((prevState) => ({
+      ...prevState,
+      price: {
+        ...prevState.price,
+        [name]: value,
+      },
+    }));
+  };
+
+  const priceValidation = (min: number | string, max: number | string) => {
+    console.log('i also run');
+    console.log(min === '', max);
+    /* when the input is empty it goes to empty string but i won't let user set it */
+    if (min === '' || max === '' || min > max) {
+      setFilterErrors((prevState) => ({
+        ...prevState,
+        price: true,
+      }));
+      console.log('set');
+    } else {
+      setFilterErrors((prevState) => ({
+        ...prevState,
+        price: false,
+      }));
+      console.log('not set');
+    }
   };
 
   return (
@@ -94,6 +138,35 @@ const Filters = ({}: Props) => {
                     onChange={handleCheckboxChange}
                   />
                 ))}
+              </div>
+            </Dropdown>
+            <Dropdown
+              buttonTitle='საფასო კატეგორია'
+              headerTitle='ფასის მიხედვით'
+              onConfirmButtonClick={handlePriceConfirmClick}
+              error={filterErrors.price}
+            >
+              <div>
+                <div className='flex w-[334px] gap-x-4'>
+                  <NumberInput
+                    placeholder='დან'
+                    name='min'
+                    value={localFilters.price.min as number}
+                    onChange={handlePriceChange}
+                  />
+                  <NumberInput
+                    placeholder='დან'
+                    name='max'
+                    value={localFilters.price.max as number}
+                    onChange={handlePriceChange}
+                  />
+                </div>
+
+                {filterErrors.price && (
+                  <p className='mt-2 font-firago text-sm text-error'>
+                    ჩაწერეთ ვალიდური მონაცემები
+                  </p>
+                )}
               </div>
             </Dropdown>
           </div>

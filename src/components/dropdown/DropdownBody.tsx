@@ -14,7 +14,7 @@ const DropdownBody = ({ children, position, onClose }: DropdownBodyProps) => {
           top: `${position.top}px`,
           left: `${position.left}px`,
         }}
-        className='p-6 rounded-md border border-border bg-white z-20'
+        className='p-6 rounded-[10px] border border-border bg-white z-20'
       >
         {children}
       </div>

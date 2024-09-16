@@ -10,6 +10,7 @@ type DropdownProps = {
   headerTitle: string;
   children?: React.ReactNode;
   onConfirmButtonClick: () => void;
+  error?: boolean;
 };
 
 const Dropdown = ({
@@ -17,6 +18,7 @@ const Dropdown = ({
   headerTitle,
   children,
   onConfirmButtonClick,
+  error = false,
 }: DropdownProps) => {
   /* position იღებს ღილაკის ადგილმდებარეობას და ამის მიხედვით გამომაქვს მოდალის მსგავსი მენიუ რომლის პოზიცია ყენდება ამავე კოორდინატებით */
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +58,9 @@ const Dropdown = ({
             <DropdownFooter
               onClick={() => {
                 onConfirmButtonClick();
-                setIsOpen(false);
+                if (!error) {
+                  setIsOpen(false);
+                }
               }}
             />
           </DropdownBody>,

@@ -21,7 +21,10 @@ const Card = ({ realEstate }: Props) => {
       .join('') + ' \u20BE';
 
   return (
-    <div key={realEstate.id} className='w-[384px]'>
+    <div
+      key={realEstate.id}
+      className='w-[384px] hover:shadow-cardShadow transition-all duration-300 rounded-[14px]'
+    >
       <div className='relative rounded-tl-[14px] rounded-tr-[14px]'>
         <img
           src={realEstate.image}

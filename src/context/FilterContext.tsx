@@ -7,8 +7,8 @@ type FilterValues = {
     checked: boolean;
   }[];
   price: {
-    min: number;
-    max: number;
+    min: number | string;
+    max: number | string;
   };
 };
 

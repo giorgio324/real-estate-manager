@@ -31,7 +31,7 @@ const Home = () => {
   if (isLoading)
     return (
       <div className='mt-[77px]'>
-        <p className='text-secondary'>Loading Data...</p>
+        <p className='text-secondary text-xl font-medium'>Loading Data...</p>
       </div>
     );
   if (error)
