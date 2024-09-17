@@ -8,4 +8,13 @@ export const listingValidationSchema = Yup.object().shape({
   zip_code: Yup.string()
     .matches(/^\d+$/, 'მხოლოდ რიცხვები')
     .required('მხოლოდ რიცხვები'),
+  price: Yup.string()
+    .matches(/^\d+$/, 'მხოლოდ რიცხვები')
+    .required('მხოლოდ რიცხვები'),
+  area: Yup.string()
+    .matches(/^\d+$/, 'მხოლოდ რიცხვები')
+    .required('მხოლოდ რიცხვები'),
+  bedrooms: Yup.string()
+    .matches(/^\d+$/, 'მხოლოდ რიცხვები')
+    .required('მხოლოდ რიცხვები'),
 });

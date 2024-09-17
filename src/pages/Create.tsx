@@ -10,6 +10,9 @@ type FormValues = {
   image: null | string;
   address: string;
   zip_code: string;
+  price: string;
+  area: string;
+  bedrooms: string;
 };
 
 /* FinalFormValues are values that get sent to server when validations pass */
@@ -17,7 +20,10 @@ type FinalFormValues = {
   image: File;
   is_rental: number;
   address: string;
-  zip_code: string;
+  zip_code: number;
+  price: number;
+  area: number;
+  bedrooms: number;
 };
 
 const Create = () => {
@@ -26,6 +32,9 @@ const Create = () => {
     is_rental: localStorage.getItem('is_rental') || '0',
     address: localStorage.getItem('address') || '',
     zip_code: localStorage.getItem('zip_code') || '',
+    price: localStorage.getItem('price') || '',
+    area: localStorage.getItem('area') || '',
+    bedrooms: localStorage.getItem('bedrooms') || '',
   };
 
   const createFileFromBase64 = (
@@ -48,11 +57,20 @@ const Create = () => {
 
   const handleSubmit = (data: FormValues) => {
     const rent = Number(data.is_rental);
+    const price = Number(data.price);
+    const area = Number(data.area);
+    const bedrooms = Number(data.bedrooms);
+    const zip_code = Number(data.zip_code);
+
     if (data.image) {
       const newImageFile = createFileFromBase64(data.image, 'uploaded-img');
       if (newImageFile) {
         const transformedData: FinalFormValues = {
           ...data,
+          area,
+          zip_code,
+          bedrooms,
+          price,
           is_rental: rent,
           image: newImageFile,
         };
@@ -98,13 +116,36 @@ const Create = () => {
                   hintText='მხოლოდ რიცხვები'
                 />
               </div>
-              <ImageUpload
-                name='image'
-                defaultImage={values.image}
-                label='ატვირთეთ ფოტო'
-              />
             </div>
-
+            <div className='mt-[80px]'>
+              <h2 className='font-helvetica font-medium text-listingTitleText'>
+                ბინის დეტალები
+              </h2>
+              <div className='flex gap-5 mt-[22px]'>
+                <TextInput
+                  label='ფასი'
+                  name='price'
+                  hintText='მხოლოდ რიცხვები'
+                />
+                <TextInput
+                  label='ფართობი'
+                  name='area'
+                  hintText='მხოლოდ რიცხვები'
+                />
+              </div>
+              <div className='mt-[20px]'>
+                <TextInput
+                  label='საძინებლების რაოდენობა*'
+                  name='bedrooms'
+                  hintText='მხოლოდ რიცხვები'
+                />
+              </div>
+            </div>
+            <ImageUpload
+              name='image'
+              defaultImage={values.image}
+              label='ატვირთეთ ფოტო'
+            />
             <Button type='submit'>დაამატე ლისტინგი</Button>
           </Form>
         )}
