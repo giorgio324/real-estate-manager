@@ -21,7 +21,7 @@ const ImageUpload = ({ name, label, defaultImage }: Props) => {
     reader.onload = () => {
       helpers.setValue(reader.result);
       setPreviewImage(reader.result as string);
-      localStorage.setItem('image', reader.result as string);
+      localStorage.setItem(name, reader.result as string);
     };
   };
 
@@ -32,7 +32,6 @@ const ImageUpload = ({ name, label, defaultImage }: Props) => {
       const image = imageFileList[0];
       const type = image.type.split('/')[0];
       if (type !== 'image') {
-        console.log('fire 2');
         helpers.setError('ფაილი უნდა იყოს სურათი');
         helpers.setTouched(true, false);
         e.target.value = '';
@@ -40,7 +39,6 @@ const ImageUpload = ({ name, label, defaultImage }: Props) => {
       }
       // 1MB
       if (image.size > 1 * 1024 * 1024) {
-        console.log('fire 3');
         helpers.setError('ფაილის ზომა აღემატება 1MB-ს');
         helpers.setTouched(true, false);
         e.target.value = '';
@@ -54,7 +52,7 @@ const ImageUpload = ({ name, label, defaultImage }: Props) => {
   const deleteImage = () => {
     setPreviewImage(null);
     helpers.setValue(null);
-    localStorage.removeItem('image');
+    localStorage.removeItem(name);
   };
 
   const touched = meta.touched;
@@ -63,7 +61,7 @@ const ImageUpload = ({ name, label, defaultImage }: Props) => {
   return (
     <>
       <label htmlFor={id} className='font-firago font-medium text-text'>
-        <span>{label} *</span>
+        <span>{label}</span>
         <div className='py-5 w-full border-2 border-filterText border-dashed rounded-lg flex justify-center items-center mt-[5px] cursor-pointer'>
           <input
             onChange={handleImageChange}

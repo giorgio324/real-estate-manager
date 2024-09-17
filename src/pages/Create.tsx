@@ -5,6 +5,7 @@ import Button from '../components/button/Button';
 import RadioInput from '../components/radioInput/RadioInput';
 import TextInput from '../components/textInput/TextInput';
 import TextAreaInput from '../components/textAreaInput/TextAreaInput';
+import { base64ToFile } from '../utils/base64ToFile';
 
 type FormValues = {
   is_rental: string;
@@ -41,24 +42,6 @@ const Create = () => {
     description: localStorage.getItem('description') || '',
   };
 
-  const createFileFromBase64 = (
-    base64String: string,
-    newFileName: string
-  ): File | undefined => {
-    if (!base64String || !newFileName) return;
-    const arr = base64String.split(',');
-    const mime = arr[0].match(/:(.*?);/)?.[1];
-    const fileExtension = mime?.split('/')[1];
-    const bstr = atob(arr[arr.length - 1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], `${newFileName}.${fileExtension}`, { type: mime });
-  };
-
   const handleSubmit = (data: FormValues) => {
     const rent = Number(data.is_rental);
     const price = Number(data.price);
@@ -66,7 +49,7 @@ const Create = () => {
     const bedrooms = Number(data.bedrooms);
 
     if (data.image) {
-      const newImageFile = createFileFromBase64(data.image, 'uploaded-img');
+      const newImageFile = base64ToFile(data.image, 'uploaded-img');
       if (newImageFile) {
         const transformedData: FinalFormValues = {
           ...data,

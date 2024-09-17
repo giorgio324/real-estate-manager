@@ -23,9 +23,11 @@ export default {
         valid: '#45A849',
         error: '#F93B1D',
         selected: '#F3F3F3',
+        overlay: 'rgba(2, 21, 38, 0.34)',
       },
       boxShadow: {
         cardShadow: '5px 5px 12px 0px rgba(2, 21, 38, 0.08)',
+        modalShadow: '5px 5px 4px 0px rgba(0, 0, 0, 0.08)',
       },
     },
   },
