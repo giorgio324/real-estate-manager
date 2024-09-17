@@ -3,22 +3,29 @@ import ImageUpload from '../components/imageUpload/ImageUpload';
 import { listingValidationSchema } from '../schemas/listingValidationSchema';
 import Button from '../components/button/Button';
 import RadioInput from '../components/radioInput/RadioInput';
+import TextInput from '../components/textInput/TextInput';
 
 type FormValues = {
-  agreementType: 'rent' | 'sell';
+  is_rental: string;
   image: null | string;
+  address: string;
+  zip_code: string;
 };
 
 /* FinalFormValues are values that get sent to server when validations pass */
 type FinalFormValues = {
   image: File;
-  is_rental: boolean;
+  is_rental: number;
+  address: string;
+  zip_code: string;
 };
 
 const Create = () => {
   const initialValues: FormValues = {
     image: localStorage.getItem('image'),
-    agreementType: 'sell',
+    is_rental: localStorage.getItem('is_rental') || '0',
+    address: localStorage.getItem('address') || '',
+    zip_code: localStorage.getItem('zip_code') || '',
   };
 
   const createFileFromBase64 = (
@@ -40,13 +47,13 @@ const Create = () => {
   };
 
   const handleSubmit = (data: FormValues) => {
-    const isRental = data.agreementType === 'rent';
+    const rent = Number(data.is_rental);
     if (data.image) {
       const newImageFile = createFileFromBase64(data.image, 'uploaded-img');
       if (newImageFile) {
         const transformedData: FinalFormValues = {
           ...data,
-          is_rental: isRental,
+          is_rental: rent,
           image: newImageFile,
         };
         console.log(transformedData);
@@ -64,27 +71,40 @@ const Create = () => {
         onSubmit={handleSubmit}
         validationSchema={listingValidationSchema}
       >
-        {({ values, errors, touched }) => (
+        {({ values }) => (
           <Form className='mt-[61px]'>
-            <ImageUpload
-              name='image'
-              defaultImage={values.image}
-              label='ატვირთეთ ფოტო'
-            />
             <div className='flex flex-col gap-2'>
               <h2 className='font-helvetica font-medium text-listingTitleText'>
                 გარიგების ტიპი
               </h2>
               <div className='flex gap-8'>
-                <RadioInput label='იყიდება' name='agreementType' value='sell' />
-                <RadioInput
-                  label='ქირავდება'
-                  name='agreementType'
-                  value='rent'
-                />
+                <RadioInput label='იყიდება' name='is_rental' value='0' />
+                <RadioInput label='ქირავდება' name='is_rental' value='1' />
               </div>
             </div>
-            <pre>{JSON.stringify({ values, errors, touched }, null, 4)}</pre>
+            <div className='mt-[80px]'>
+              <h2 className='font-helvetica font-medium text-listingTitleText'>
+                მდებარეობა
+              </h2>
+              <div className='flex gap-5 mt-[22px]'>
+                <TextInput
+                  label='მისამართი *'
+                  name='address'
+                  hintText='მინიმუმ ორი სიმბოლო'
+                />
+                <TextInput
+                  label='საფოსტო ინდექსი *'
+                  name='zip_code'
+                  hintText='მხოლოდ რიცხვები'
+                />
+              </div>
+              <ImageUpload
+                name='image'
+                defaultImage={values.image}
+                label='ატვირთეთ ფოტო'
+              />
+            </div>
+
             <Button type='submit'>დაამატე ლისტინგი</Button>
           </Form>
         )}

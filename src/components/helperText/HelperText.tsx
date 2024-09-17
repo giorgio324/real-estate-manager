@@ -15,23 +15,26 @@ const HelperText = ({
   displayIcon,
   state = 'info',
 }: Props) => {
+  // Determine the text color class based on the state
+  const textColorClass = {
+    valid: 'text-valid',
+    error: 'text-error',
+    info: 'text-text',
+  }[state];
+
+  // Determine the icon source based on the state
+  const iconSrc = {
+    valid: validIcon,
+    error: errorIcon,
+    info: validationIcon,
+  }[state];
+
   return (
-    <div
-      className={`font-firago text-sm mt-2 flex ${
-        state === 'valid' ? 'text-valid' : ''
-      } ${state === 'error' ? 'text-error' : ''} ${
-        state === 'info' ? 'text-text' : ''
-      }`}
-    >
+    <div className={`font-firago text-sm mt-2 flex ${textColorClass}`}>
       {displayIcon && (
-        <img
-          src={`${state === 'valid' ? validIcon : ''} ${
-            state === 'error' ? errorIcon : ''
-          } ${state === 'info' ? validationIcon : ''}`}
-          alt='helper icon'
-          className={`mr-[7px]`}
-        />
+        <img src={iconSrc} alt='helper icon' className='mr-[7px]' />
       )}
+      {/* Display error text if the state is error, else show hint text */}
       {state === 'error' && errorText && <p>{errorText}</p>}
       {(state === 'valid' || state === 'info') && hintText && <p>{hintText}</p>}
     </div>
