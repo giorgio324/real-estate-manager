@@ -17,4 +17,12 @@ export const listingValidationSchema = Yup.object().shape({
   bedrooms: Yup.string()
     .matches(/^\d+$/, 'მხოლოდ რიცხვები')
     .required('მხოლოდ რიცხვები'),
+  description: Yup.string()
+    .required('მინიმუმ ხუთი სიტყვა')
+    .test('lengthCheck', 'მინიმუმ ხუთი სიტყვა', (value) => {
+      if (!value) {
+        return false;
+      }
+      return value.trim().split(/\s+/).length >= 5;
+    }),
 });

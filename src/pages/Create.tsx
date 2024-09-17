@@ -4,6 +4,7 @@ import { listingValidationSchema } from '../schemas/listingValidationSchema';
 import Button from '../components/button/Button';
 import RadioInput from '../components/radioInput/RadioInput';
 import TextInput from '../components/textInput/TextInput';
+import TextAreaInput from '../components/textAreaInput/TextAreaInput';
 
 type FormValues = {
   is_rental: string;
@@ -13,6 +14,7 @@ type FormValues = {
   price: string;
   area: string;
   bedrooms: string;
+  description: string;
 };
 
 /* FinalFormValues are values that get sent to server when validations pass */
@@ -20,10 +22,11 @@ type FinalFormValues = {
   image: File;
   is_rental: number;
   address: string;
-  zip_code: number;
+  zip_code: string;
   price: number;
   area: number;
   bedrooms: number;
+  description: string;
 };
 
 const Create = () => {
@@ -35,6 +38,7 @@ const Create = () => {
     price: localStorage.getItem('price') || '',
     area: localStorage.getItem('area') || '',
     bedrooms: localStorage.getItem('bedrooms') || '',
+    description: localStorage.getItem('description') || '',
   };
 
   const createFileFromBase64 = (
@@ -60,7 +64,6 @@ const Create = () => {
     const price = Number(data.price);
     const area = Number(data.area);
     const bedrooms = Number(data.bedrooms);
-    const zip_code = Number(data.zip_code);
 
     if (data.image) {
       const newImageFile = createFileFromBase64(data.image, 'uploaded-img');
@@ -68,7 +71,6 @@ const Create = () => {
         const transformedData: FinalFormValues = {
           ...data,
           area,
-          zip_code,
           bedrooms,
           price,
           is_rental: rent,
@@ -80,7 +82,7 @@ const Create = () => {
   };
 
   return (
-    <div className='px-[404px] pt-16'>
+    <div className='px-[404px] pt-16 pb-[87px]'>
       <h1 className='font-firago font-medium text-text text-3xl text-center'>
         ლისტინგის დამატება
       </h1>
@@ -141,12 +143,34 @@ const Create = () => {
                 />
               </div>
             </div>
-            <ImageUpload
-              name='image'
-              defaultImage={values.image}
-              label='ატვირთეთ ფოტო'
-            />
-            <Button type='submit'>დაამატე ლისტინგი</Button>
+            <div className='mt-5'>
+              <TextAreaInput
+                label='აღწერა *'
+                name='description'
+                hintText='მინიმუმ ხუთი სიტყვა'
+              />
+            </div>
+            <div className='mt-5'>
+              <ImageUpload
+                name='image'
+                defaultImage={values.image}
+                label='ატვირთეთ ფოტო'
+              />
+            </div>
+            <div className='mt-[90px] flex justify-end gap-[15px]'>
+              <Button
+                type='button'
+                className='border border-primary text-primary bg-white hover:bg-primary hover:text-white'
+              >
+                გაუქმება
+              </Button>
+              <Button
+                type='submit'
+                className='border border-primary hover:bg-primaryHover'
+              >
+                დაამატე ლისტინგი
+              </Button>
+            </div>
           </Form>
         )}
       </Formik>

@@ -30,9 +30,15 @@ const HelperText = ({
   }[state];
 
   return (
-    <div className={`font-firago text-sm mt-2 flex ${textColorClass}`}>
+    <div
+      className={`flex items-center font-firago text-sm mt-2 ${textColorClass}`}
+    >
       {displayIcon && (
-        <img src={iconSrc} alt='helper icon' className='mr-[7px]' />
+        <img
+          src={iconSrc}
+          alt='helper icon'
+          className='mr-[7px] w-[10px] h-[8px]'
+        />
       )}
       {/* Display error text if the state is error, else show hint text */}
       {state === 'error' && errorText && <p>{errorText}</p>}

@@ -28,7 +28,7 @@ const RadioInput = ({ label, name, value }: RadioInputProps) => {
       />
       <label
         htmlFor={id}
-        className='ml-2 block text-sm font-medium text-gray-700'
+        className='pl-2 block text-sm font-medium text-gray-700'
       >
         {label}
       </label>
