@@ -5,13 +5,8 @@ import Checkbox from './checkbox/Checkbox';
 import Dropdown from './dropdown/Dropdown';
 import { useEffect, useState } from 'react';
 import NumberInput from './numberInput/NumberInput';
-import Modal from './modal/Modal';
-import { Form, Formik } from 'formik';
-import { Agent, FinalAgent } from '../types/agent';
-import { base64ToFile } from '../utils/base64ToFile';
-import TextInput from './textInput/TextInput';
-import ImageUpload from './imageUpload/ImageUpload';
-import { agentValidationSchema } from '../schemas/agentValidationSchema';
+import { useModal } from '../context/ModalContext';
+import RegisterAgentModal from './modal/RegisterAgentModal';
 
 type Region = {
   id: number;
@@ -33,13 +28,7 @@ type FilterValues = {
 type Props = {};
 
 const Filters = ({}: Props) => {
-  const initialValues: Agent = {
-    agentImage: localStorage.getItem('agentImage'),
-    email: localStorage.getItem('email') || '',
-    name: localStorage.getItem('name') || '',
-    lastName: localStorage.getItem('lastName') || '',
-    phone: localStorage.getItem('phone') || '',
-  };
+  const { setIsOpen } = useModal();
   const { data, error, isLoading } = useFetch<Region[]>('/regions');
   const [localFilters, setLocalFilters] = useState<FilterValues>({
     price: { min: '', max: '' },
@@ -133,21 +122,6 @@ const Filters = ({}: Props) => {
     }
   };
 
-  const handleSubmit = (data: Agent) => {
-    const phone = Number(data.phone);
-    if (data.agentImage) {
-      const newImageFile = base64ToFile(data.agentImage, 'uploaded-img');
-      if (newImageFile) {
-        const transformedData: FinalAgent = {
-          ...data,
-          phone: phone,
-          agentImage: newImageFile,
-        };
-        console.log(transformedData);
-      }
-    }
-  };
-
   return (
     <>
       <section className='flex justify-between'>
@@ -211,81 +185,48 @@ const Filters = ({}: Props) => {
               })}
           </div>
         </div>
-        <div>
-          <Button>
+        <div className='flex items-center gap-4 '>
+          {/* svg-ის პირდაპირ შემოგდება მიწებს რადგან currentcolor არ აქვს შემოიმპორტირებისას... */}
+          <Button className='flex gap-[2px] items-center justify-center border border-primary text-white hover:text-white bg-primary hover:bg-primaryHover'>
             <span>
-              <img src='' alt='' />
+              <svg
+                width='22'
+                height='23'
+                viewBox='0 0 22 23'
+                fill='currentColor'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M16.5 12.4144H11.9166V16.9977C11.9166 17.2408 11.8201 17.474 11.6482 17.6459C11.4763 17.8178 11.2431 17.9144 11 17.9144C10.7569 17.9144 10.5237 17.8178 10.3518 17.6459C10.1799 17.474 10.0833 17.2408 10.0833 16.9977V12.4144H5.49998C5.25686 12.4144 5.02371 12.3178 4.8518 12.1459C4.67989 11.974 4.58331 11.7408 4.58331 11.4977C4.58331 11.2546 4.67989 11.0214 4.8518 10.8495C5.02371 10.6776 5.25686 10.5811 5.49998 10.5811H10.0833V5.99772C10.0833 5.75461 10.1799 5.52145 10.3518 5.34954C10.5237 5.17763 10.7569 5.08105 11 5.08105C11.2431 5.08105 11.4763 5.17763 11.6482 5.34954C11.8201 5.52145 11.9166 5.75461 11.9166 5.99772V10.5811H16.5C16.7431 10.5811 16.9763 10.6776 17.1482 10.8495C17.3201 11.0214 17.4166 11.2546 17.4166 11.4977C17.4166 11.7408 17.3201 11.974 17.1482 12.1459C16.9763 12.3178 16.7431 12.4144 16.5 12.4144Z'
+                  fill='currentColor'
+                />
+              </svg>
             </span>
             ლისტინგის დამატება
           </Button>
-          <Button>
+          <Button
+            className='flex gap-[2px] items-center justify-center border border-primary text-primary hover:text-white bg-white hover:bg-primary'
+            onClick={() => setIsOpen(true)}
+          >
             <span>
-              <img src='' alt='' />
+              <svg
+                width='22'
+                height='23'
+                viewBox='0 0 22 23'
+                fill='currentColor'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M16.5 12.4144H11.9166V16.9977C11.9166 17.2408 11.8201 17.474 11.6482 17.6459C11.4763 17.8178 11.2431 17.9144 11 17.9144C10.7569 17.9144 10.5237 17.8178 10.3518 17.6459C10.1799 17.474 10.0833 17.2408 10.0833 16.9977V12.4144H5.49998C5.25686 12.4144 5.02371 12.3178 4.8518 12.1459C4.67989 11.974 4.58331 11.7408 4.58331 11.4977C4.58331 11.2546 4.67989 11.0214 4.8518 10.8495C5.02371 10.6776 5.25686 10.5811 5.49998 10.5811H10.0833V5.99772C10.0833 5.75461 10.1799 5.52145 10.3518 5.34954C10.5237 5.17763 10.7569 5.08105 11 5.08105C11.2431 5.08105 11.4763 5.17763 11.6482 5.34954C11.8201 5.52145 11.9166 5.75461 11.9166 5.99772V10.5811H16.5C16.7431 10.5811 16.9763 10.6776 17.1482 10.8495C17.3201 11.0214 17.4166 11.2546 17.4166 11.4977C17.4166 11.7408 17.3201 11.974 17.1482 12.1459C16.9763 12.3178 16.7431 12.4144 16.5 12.4144Z'
+                  fill='currentColor'
+                />
+              </svg>
             </span>
-            ლისტინგის დამატება
+            აგენტის დამატება
           </Button>
         </div>
       </section>
-      <Modal>
-        <h1 className='font-firago font-medium text-3xl text-center text-text'>
-          აგენტის დამატება
-        </h1>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={agentValidationSchema}
-        >
-          {({ values }) => (
-            <Form className='mt-[61px] text-text'>
-              <div className='flex gap-8'>
-                <TextInput
-                  label='სახელი *'
-                  name='name'
-                  hintText='მინიმუმ ორი სიმბოლო'
-                />
-                <TextInput
-                  label='გვარი'
-                  name='lastName'
-                  hintText='მინიმუმ ორი სიმბოლო'
-                />
-              </div>
-              <div className='flex gap-8 mt-7'>
-                <TextInput
-                  label='ელ-ფოსტა*'
-                  name='email'
-                  hintText='გამოიყენეთ @redberry.ge ფოსტა'
-                />
-                <TextInput
-                  label='ტელეფონის ნომერი'
-                  name='phone'
-                  hintText='მხოლოდ რიცხვები'
-                />
-              </div>
-              <div className='mt-7'>
-                <ImageUpload
-                  defaultImage={values.agentImage}
-                  label='ატვირთეთ ფოტო *'
-                  name='agentImage'
-                />
-              </div>
-              <div className='mt-[90px] flex justify-end gap-[15px]'>
-                <Button
-                  type='button'
-                  className='border border-primary text-primary bg-white hover:bg-primary hover:text-white'
-                >
-                  გაუქმება
-                </Button>
-                <Button
-                  type='submit'
-                  className='border border-primary hover:bg-primaryHover'
-                >
-                  დაამატე აგენტი
-                </Button>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </Modal>
+      <RegisterAgentModal />
     </>
   );
 };

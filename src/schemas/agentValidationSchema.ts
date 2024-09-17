@@ -4,7 +4,7 @@ export const agentValidationSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'მინიმუმ ორი სიმბოლო')
     .required('მინიმუმ ორი სიმბოლო'),
-  lastName: Yup.string()
+  surname: Yup.string()
     .min(2, 'მინიმუმ ორი სიმბოლო')
     .required('მინიმუმ ორი სიმბოლო'),
   email: Yup.string()
@@ -18,5 +18,5 @@ export const agentValidationSchema = Yup.object().shape({
     .matches(/^5\d{8}$/, 'მხოლოდ რიცხვები')
     .length(9, 'მხოლოდ რიცხვები')
     .required('მხოლოდ რიცხვები'),
-  agentImage: Yup.string().required('სურათი სავალდებულოა'),
+  avatar: Yup.string().required('სურათი სავალდებულოა'),
 });

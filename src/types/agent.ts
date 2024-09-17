@@ -1,15 +1,15 @@
 export type Agent = {
   name: string;
-  lastName: string;
+  surname: string;
   email: string;
   phone: string;
-  agentImage: null | string;
+  avatar: null | string;
 };
 
 export type FinalAgent = {
   name: String;
-  lastName: string;
+  surname: string;
   email: string;
   phone: number;
-  agentImage: File;
+  avatar: File;
 };

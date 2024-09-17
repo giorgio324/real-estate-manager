@@ -26,7 +26,6 @@ const ImageUpload = ({ name, label, defaultImage }: Props) => {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('s');
     const imageFileList = e.target.files;
     if (imageFileList) {
       const image = imageFileList[0];
