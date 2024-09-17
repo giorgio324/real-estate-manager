@@ -1,4 +1,4 @@
-import validationIcon from '../../assets/images/validationIcon.svg';
+import validationIcon from '../../assets/images/ValidationIcon.svg';
 import errorIcon from '../../assets/images/ErrorIcon.svg';
 import validIcon from '../../assets/images/ValidIcon.svg';
 
