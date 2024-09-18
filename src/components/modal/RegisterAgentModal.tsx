@@ -7,10 +7,11 @@ import TextInput from '../textInput/TextInput';
 import ImageUpload from '../imageUpload/ImageUpload';
 import Button from '../button/Button';
 import { useModal } from '../../context/ModalContext';
+import { useCreateAgent } from '../../hooks/useCreateAgent';
 
 const RegisterAgentModal = () => {
   const { setIsOpen } = useModal();
-
+  const { mutate } = useCreateAgent(setIsOpen);
   const initialValues: Agent = {
     avatar: localStorage.getItem('avatar'),
     email: localStorage.getItem('email') || '',
@@ -20,16 +21,14 @@ const RegisterAgentModal = () => {
   };
 
   const handleSubmit = (data: Agent) => {
-    const phone = Number(data.phone);
     if (data.avatar) {
       const newImageFile = base64ToFile(data.avatar, 'uploaded-img');
       if (newImageFile) {
         const transformedData: FinalAgent = {
           ...data,
-          phone: phone,
           avatar: newImageFile,
         };
-        console.log('sent data: ', transformedData);
+        mutate(transformedData);
       }
     }
   };

@@ -7,9 +7,9 @@ export type Agent = {
 };
 
 export type FinalAgent = {
-  name: String;
+  name: string;
   surname: string;
   email: string;
-  phone: number;
+  phone: string;
   avatar: File;
 };
