@@ -1,8 +1,8 @@
-import { type RealEstate } from '../../types/estate';
 import bedIcon from '../../assets/images/BedIcon.svg';
 import sizeIcon from '../../assets/images/SizeIcon.svg';
 import postIcon from '../../assets/images/PostIcon.svg';
 import locationIcon from '../../assets/images/LocationIcon.svg';
+import { RealEstate } from '../../types/realEstate';
 
 type Props = {
   realEstate: RealEstate;

@@ -1,33 +1,10 @@
 import Cards from '../components/cards/Cards';
 import Filters from '../components/Filters';
-import { useFetch } from '../hooks/useFetch';
 import { FilterProvider } from '../context/FilterContext';
-
-type City = {
-  id: number;
-  name: string;
-  region_id: number;
-  region: {
-    id: number;
-    name: string;
-  };
-};
-
-type RealEstate = {
-  id: number;
-  address: string;
-  area: number;
-  bedrooms: number;
-  city: City;
-  city_id: number;
-  image: string;
-  is_rental: boolean;
-  price: number;
-  zip_code: string;
-};
+import { useRealEstatesData } from '../hooks/useRealEstateData';
 
 const Home = () => {
-  const { data, error, isLoading } = useFetch<RealEstate[]>('/real-estates');
+  const { data, isLoading, error } = useRealEstatesData();
   if (isLoading)
     return (
       <div className='mt-[77px]'>
@@ -37,7 +14,7 @@ const Home = () => {
   if (error)
     return (
       <div className='mt-[77px]'>
-        <p className='text-secondary'>{error}</p>
+        <p className='text-secondary'>{error.message}</p>
       </div>
     );
   return (

@@ -1,8 +1,8 @@
-import { type RealEstate } from '../../types/estate';
+import { RealEstate } from '../../types/realEstate';
 import Card from './Card';
 
 type Props = {
-  realEstates: RealEstate[] | null;
+  realEstates?: RealEstate[];
 };
 
 const Cards = ({ realEstates }: Props) => {

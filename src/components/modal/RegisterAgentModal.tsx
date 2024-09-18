@@ -29,7 +29,7 @@ const RegisterAgentModal = () => {
           phone: phone,
           avatar: newImageFile,
         };
-        console.log(transformedData);
+        console.log('sent data: ', transformedData);
       }
     }
   };

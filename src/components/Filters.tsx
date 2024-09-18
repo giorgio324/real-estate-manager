@@ -1,5 +1,4 @@
 import { useFilter } from '../context/FilterContext';
-import { useFetch } from '../hooks/useFetch';
 import Button from './button/Button';
 import Checkbox from './checkbox/Checkbox';
 import Dropdown from './dropdown/Dropdown';
@@ -7,11 +6,7 @@ import { useEffect, useState } from 'react';
 import NumberInput from './numberInput/NumberInput';
 import { useModal } from '../context/ModalContext';
 import RegisterAgentModal from './modal/RegisterAgentModal';
-
-type Region = {
-  id: number;
-  name: string;
-};
+import { useRegionsData } from '../hooks/useRegionsData';
 
 type FilterValues = {
   region: {
@@ -29,7 +24,7 @@ type Props = {};
 
 const Filters = ({}: Props) => {
   const { setIsOpen } = useModal();
-  const { data, error, isLoading } = useFetch<Region[]>('/regions');
+  const { data, error, isLoading } = useRegionsData();
   const [localFilters, setLocalFilters] = useState<FilterValues>({
     price: { min: '', max: '' },
     region: [],
@@ -64,7 +59,7 @@ const Filters = ({}: Props) => {
     }
   }, [data, setLocalFilters]);
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   const handleConfirmButtonClick = () => {
     setFilters(localFilters);
