@@ -108,7 +108,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         validationSchema={listingValidationSchema}
       >
-        {({ values, touched, errors }) => {
+        {({ values }) => {
           const filteredCities = cities?.filter(
             (city) => city.region_id === values.region?.id
           );
@@ -204,7 +204,6 @@ const Create = () => {
                   დაამატე ლისტინგი
                 </Button>
               </div>
-              <pre>{JSON.stringify({ values, touched, errors }, null, 4)}</pre>
             </Form>
           );
         }}

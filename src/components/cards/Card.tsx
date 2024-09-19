@@ -4,6 +4,7 @@ import postIcon from '../../assets/images/PostIcon.svg';
 import locationIcon from '../../assets/images/LocationIcon.svg';
 import { RealEstate } from '../../types/realEstate';
 import { Link } from 'react-router-dom';
+import ImageTag from '../imageTag/ImageTag';
 
 type Props = {
   realEstate: RealEstate;
@@ -33,9 +34,7 @@ const Card = ({ realEstate }: Props) => {
           alt={`Estate in ${realEstate.city.name}`}
           className='w-[384px] h-[307px] rounded-tl-[14px] rounded-tr-[14px]'
         />
-        <span className='absolute top-[23px] left-[23px] w-[90px] text-center font-firago font-medium text-xs text-white bg-secondary px-[10px] py-[6px] rounded-[15px]'>
-          {realEstate.is_rental ? 'ქირავდება' : 'იყიდება'}
-        </span>
+        <ImageTag is_rental={realEstate.is_rental} />
       </div>
       <div className='font-firago py-[22px] px-[25px] border-l border-l-border border-r border-r-border border-b border-b-border rounded-bl-[14px] rounded-br-[14px]'>
         <p className='leading-8 text-[28px] font-bold'>{price}</p>
