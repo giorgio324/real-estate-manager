@@ -10,29 +10,23 @@ import { useCitiesData } from '../hooks/useCitiesData';
 import { useRegionsData } from '../hooks/useRegionsData';
 import GroupedSelect from '../components/select/GroupedSelect';
 import { useAgentsData } from '../hooks/useAgentData';
-import { CreateListingFormValues } from '../types/formValues';
+import {
+  CreateListingFormFinalValues,
+  CreateListingFormValues,
+} from '../types/formValues';
 import SelectAgent from '../components/select/SelectAgent';
-
-/* FinalFormValues are values that get sent to server when validations pass */
-type FinalFormValues = {
-  image: File;
-  is_rental: string;
-  address: string;
-  zip_code: string;
-  price: string;
-  area: string;
-  bedrooms: string;
-  description: string;
-  city_id: string;
-  region_id: string;
-};
+import { useCreateRealEstate } from '../hooks/useCreateRealEstate';
+import { useNavigate } from 'react-router-dom';
 
 const Create = () => {
+  const navigate = useNavigate();
+
   const {
     data: cities,
     error: citiesError,
     isLoading: citiesLoading,
   } = useCitiesData();
+
   const {
     data: regions,
     error: regionsError,
@@ -45,6 +39,8 @@ const Create = () => {
     isLoading: agentsLoading,
   } = useAgentsData();
 
+  const { mutate } = useCreateRealEstate();
+
   const initialValues: CreateListingFormValues = {
     image: localStorage.getItem('image'),
     is_rental: localStorage.getItem('is_rental') || '0',
@@ -56,25 +52,49 @@ const Create = () => {
     description: localStorage.getItem('description') || '',
     region: JSON.parse(localStorage.getItem('region') || 'null'),
     city: JSON.parse(localStorage.getItem('city') || 'null'),
+    agent: JSON.parse(localStorage.getItem('agent') || 'null'),
   };
 
   const handleSubmit = (data: CreateListingFormValues) => {
     const region_id = data.region?.id.toString();
     const city_id = data.city?.id.toString();
+    const agent_id = data.agent?.id.toString();
     if (data.image) {
       const newImageFile = base64ToFile(data.image, 'uploaded-img');
       if (newImageFile) {
-        if (city_id && region_id) {
-          const transformedData: FinalFormValues = {
-            ...data,
+        if (city_id && region_id && agent_id) {
+          const transformedData: CreateListingFormFinalValues = {
+            address: data.address,
+            area: data.area,
+            bedrooms: data.bedrooms,
+            description: data.description,
+            is_rental: data.is_rental,
+            price: data.price,
+            zip_code: data.zip_code,
             city_id,
             region_id,
+            agent_id,
             image: newImageFile,
           };
-          console.log(transformedData);
+          mutate(transformedData);
         }
       }
     }
+  };
+
+  const handleCancelButtonClick = () => {
+    localStorage.removeItem('address');
+    localStorage.removeItem('agent');
+    localStorage.removeItem('area');
+    localStorage.removeItem('bedrooms');
+    localStorage.removeItem('description');
+    localStorage.removeItem('image');
+    localStorage.removeItem('is_rental');
+    localStorage.removeItem('price');
+    localStorage.removeItem('zip_code');
+    localStorage.removeItem('city');
+    localStorage.removeItem('region');
+    navigate('/');
   };
 
   return (
@@ -118,14 +138,12 @@ const Create = () => {
                     hintText='მხოლოდ რიცხვები'
                   />
                 </div>
-                <div className='flex gap-5 mt-5'>
-                  <GroupedSelect
-                    isLoading={regionsLoading || citiesLoading}
-                    error={regionsError?.message || citiesError?.message}
-                    cities={filteredCities}
-                    regions={regions}
-                  />
-                </div>
+                <GroupedSelect
+                  isLoading={regionsLoading || citiesLoading}
+                  error={regionsError?.message || citiesError?.message}
+                  cities={filteredCities}
+                  regions={regions}
+                />
               </div>
               <div className='mt-[80px]'>
                 <h2 className='font-helvetica font-medium text-listingTitleText'>
@@ -172,6 +190,7 @@ const Create = () => {
               />
               <div className='mt-[90px] flex justify-end gap-[15px]'>
                 <Button
+                  onClick={handleCancelButtonClick}
                   type='button'
                   className='border border-primary text-primary bg-white hover:bg-primary hover:text-white'
                 >

@@ -1,3 +1,4 @@
+import { Agent } from './agent';
 import { City } from './city';
 import { Region } from './region';
 
@@ -12,6 +13,21 @@ export type CreateListingFormValues = {
   description: string;
   city: City | null;
   region: Region | null;
+  agent: Agent | null;
+};
+
+export type CreateListingFormFinalValues = {
+  image: File;
+  is_rental: string;
+  address: string;
+  zip_code: string;
+  price: string;
+  area: string;
+  bedrooms: string;
+  description: string;
+  city_id: string;
+  region_id: string;
+  agent_id: string;
 };
 
 export type CreateAgentFormValues = {

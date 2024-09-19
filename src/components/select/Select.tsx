@@ -18,7 +18,7 @@ type Props<T> = {
   error?: string;
 };
 
-const LinkedSelect = <T,>({
+const Select = <T,>({
   options,
   placeholder,
   error: dataError,
@@ -103,4 +103,4 @@ const LinkedSelect = <T,>({
   );
 };
 
-export default LinkedSelect;
+export default Select;

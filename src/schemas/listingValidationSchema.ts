@@ -38,5 +38,15 @@ export const listingValidationSchema = Yup.object().shape({
     .shape({
       id: Yup.number().required('სავალდებულო'),
       name: Yup.string().required('სავალდებულო'),
+      region_id: Yup.number().required('სავალდებულო'),
+    }),
+  agent: Yup.object()
+    .nullable()
+    .required('სავალდებულო')
+    .shape({
+      id: Yup.number().required('სავალდებულო'),
+      name: Yup.string().required('სავალდებულო'),
+      surname: Yup.string().required('სავალდებულო'),
+      avatar: Yup.string().required('სავალდებულო'),
     }),
 });

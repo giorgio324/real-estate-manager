@@ -1,6 +1,6 @@
 import { useFormikContext } from 'formik';
 import { Agent } from '../../types/agent';
-import LinkedSelect from './LinkedSelect';
+import Select from './Select';
 
 type Props = {
   agents?: Agent[];
@@ -14,9 +14,10 @@ const SelectAgent = ({ agents, isLoading, error }: Props) => {
     setFieldValue('agent', agent);
     localStorage.setItem('agent', JSON.stringify(agent));
   };
+
   return (
     <div className='mt-[80px]'>
-      <LinkedSelect<Agent>
+      <Select<Agent>
         isLoading={isLoading}
         error={error}
         label='აირჩიე'

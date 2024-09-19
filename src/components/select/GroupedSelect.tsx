@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import { City } from '../../types/city';
 import { Region } from '../../types/region';
-import LinkedSelect from './LinkedSelect';
+import Select from './Select';
 type Props = {
   cities?: City[];
   regions?: Region[];
@@ -22,8 +22,8 @@ const GroupedSelect = ({ cities, regions, isLoading, error }: Props) => {
   };
 
   return (
-    <div className='flex items-center gap-5'>
-      <LinkedSelect<Region>
+    <div className='flex items-center gap-5 mt-5'>
+      <Select<Region>
         isLoading={isLoading}
         error={error}
         label='რეგიონი'
@@ -32,7 +32,7 @@ const GroupedSelect = ({ cities, regions, isLoading, error }: Props) => {
         name='region'
         onChange={handleRegionChange}
       />
-      <LinkedSelect<City>
+      <Select<City>
         isLoading={isLoading}
         error={error}
         label='ქალაქი'
