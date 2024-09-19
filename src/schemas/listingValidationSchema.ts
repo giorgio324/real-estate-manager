@@ -25,4 +25,18 @@ export const listingValidationSchema = Yup.object().shape({
       }
       return value.trim().split(/\s+/).length >= 5;
     }),
+  region: Yup.object()
+    .nullable()
+    .required('სავალდებულო')
+    .shape({
+      id: Yup.number().required('სავალდებულო'),
+      name: Yup.string().required('სავალდებულო'),
+    }),
+  city: Yup.object()
+    .nullable()
+    .required('სავალდებულო')
+    .shape({
+      id: Yup.number().required('სავალდებულო'),
+      name: Yup.string().required('სავალდებულო'),
+    }),
 });
