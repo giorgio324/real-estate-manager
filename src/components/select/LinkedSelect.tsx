@@ -1,17 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { useField } from 'formik';
 import dropdownIcon from '../../assets/images/DropdownIconDown.svg';
-type Props = {
-  options: { id: number; name: string }[] | undefined;
+
+type Option<T> = {
+  id: number;
+  name: string;
+} & T;
+
+type Props<T> = {
+  options: Option<T>[] | undefined;
   placeholder: string;
   name: string;
   label: string;
-  onChange?: (item: { id: number; name: string }) => void;
+  onChange?: (item: Option<T>) => void;
+  onClick?: () => void;
   isLoading: boolean;
   error?: string;
 };
 
-const LinkedSelect = ({
+const LinkedSelect = <T,>({
   options,
   placeholder,
   error: dataError,
@@ -19,10 +26,12 @@ const LinkedSelect = ({
   name,
   label,
   onChange,
-}: Props) => {
+  onClick,
+}: Props<T>) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [_field, meta] = useField<{ id: number; name: string }>(name);
+  const [_field, meta] = useField<Option<T>>(name);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -40,10 +49,16 @@ const LinkedSelect = ({
   }, []);
 
   const handleClick = () => {
+    if (options?.length === 0) {
+      if (onClick) {
+        onClick();
+      }
+      return;
+    }
     setIsOpen((prevState) => !prevState);
   };
 
-  const handleSelect = (item: { id: number; name: string }) => {
+  const handleSelect = (item: Option<T>) => {
     if (onChange) {
       onChange(item);
     }
@@ -62,22 +77,24 @@ const LinkedSelect = ({
       <div
         onClick={handleClick}
         className={`border mt-[5px] px-[10px] py-[12px] w-full text-sm flex justify-between ${
-          isOpen ? 'rounded-tl-md rounded-tr-md border-b-0' : 'rounded-md'
+          isOpen
+            ? 'rounded-tl-md rounded-tr-md border-b-transparent'
+            : 'rounded-md'
         } ${touched && error ? 'border-error' : 'border-silver'}`}
       >
         {isLoading ? <p>loading...</p> : meta.value?.name || placeholder}
         {dataError && <p>{dataError}</p>}
-        <img src={dropdownIcon} alt='dropown icon' />
+        <img src={dropdownIcon} alt='dropdown icon' />
       </div>
       {isOpen && (
         <div className='absolute bottom-0 transform translate-y-full left-0 rounded-bl-md rounded-br-md bg-white w-full z-10'>
           {options?.map((item) => (
             <div
-              key={item?.id}
+              key={item.id}
               onClick={() => handleSelect(item)}
               className='border bordermd border-silver px-[10px] py-[12px] w-full text-sm border-b-0 last:border-b last:rounded-bl-md last:rounded-br-md'
             >
-              {item?.name}
+              {item.name}
             </div>
           ))}
         </div>

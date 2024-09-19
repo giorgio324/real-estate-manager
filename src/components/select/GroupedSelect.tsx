@@ -9,20 +9,21 @@ type Props = {
   isLoading: boolean;
 };
 const GroupedSelect = ({ cities, regions, isLoading, error }: Props) => {
-  const { setFieldValue } = useFormikContext();
-  const handleRegionChange = (item: { id: number; name: string }) => {
+  const { setFieldValue, setFieldTouched } = useFormikContext();
+  const handleRegionChange = (item: Region) => {
     setFieldValue('region', item);
     setFieldValue('city', null, false);
     localStorage.setItem('region', JSON.stringify(item));
   };
 
-  const handleCityChange = (item: { id: number; name: string }) => {
+  const handleCityChange = (item: City) => {
     setFieldValue('city', item);
     localStorage.setItem('city', JSON.stringify(item));
   };
+
   return (
     <div className='flex items-center gap-5'>
-      <LinkedSelect
+      <LinkedSelect<Region>
         isLoading={isLoading}
         error={error}
         label='რეგიონი'
@@ -31,13 +32,19 @@ const GroupedSelect = ({ cities, regions, isLoading, error }: Props) => {
         name='region'
         onChange={handleRegionChange}
       />
-      <LinkedSelect
+      <LinkedSelect<City>
         isLoading={isLoading}
         error={error}
         label='ქალაქი'
         options={cities}
         placeholder='აირჩიე ქალაქი'
         name='city'
+        onClick={() => {
+          if (cities?.length === 0) {
+            setFieldTouched('region', true, true);
+            return;
+          }
+        }}
         onChange={handleCityChange}
       />
     </div>

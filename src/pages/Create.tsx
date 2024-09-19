@@ -9,7 +9,9 @@ import { base64ToFile } from '../utils/base64ToFile';
 import { useCitiesData } from '../hooks/useCitiesData';
 import { useRegionsData } from '../hooks/useRegionsData';
 import GroupedSelect from '../components/select/GroupedSelect';
-import { CreateForm } from '../types/formValues';
+import { useAgentsData } from '../hooks/useAgentData';
+import { CreateListingFormValues } from '../types/formValues';
+import SelectAgent from '../components/select/SelectAgent';
 
 /* FinalFormValues are values that get sent to server when validations pass */
 type FinalFormValues = {
@@ -36,7 +38,14 @@ const Create = () => {
     error: regionsError,
     isLoading: regionsLoading,
   } = useRegionsData();
-  const initialValues: CreateForm = {
+
+  const {
+    data: agents,
+    error: agentsError,
+    isLoading: agentsLoading,
+  } = useAgentsData();
+
+  const initialValues: CreateListingFormValues = {
     image: localStorage.getItem('image'),
     is_rental: localStorage.getItem('is_rental') || '0',
     address: localStorage.getItem('address') || '',
@@ -49,8 +58,7 @@ const Create = () => {
     city: JSON.parse(localStorage.getItem('city') || 'null'),
   };
 
-  /* TODO:area can be 10.5 price should not be 02000 */
-  const handleSubmit = (data: CreateForm) => {
+  const handleSubmit = (data: CreateListingFormValues) => {
     const region_id = data.region?.id.toString();
     const city_id = data.city?.id.toString();
     if (data.image) {
@@ -157,6 +165,11 @@ const Create = () => {
                   label='ატვირთეთ ფოტო'
                 />
               </div>
+              <SelectAgent
+                agents={agents}
+                isLoading={agentsLoading}
+                error={agentsError?.message}
+              />
               <div className='mt-[90px] flex justify-end gap-[15px]'>
                 <Button
                   type='button'

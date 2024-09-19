@@ -1,7 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
-import { FinalAgent } from '../types/agent';
+import { CreateAgentFormFinalValues } from '../types/formValues';
+import { Agent } from '../types/agent';
 
-const createAgent = async (agent: FinalAgent): Promise<FinalAgent> => {
+const createAgent = async (
+  agent: CreateAgentFormFinalValues
+): Promise<Agent> => {
   const formData = new FormData();
 
   Object.entries(agent).forEach(([key, value]) => {

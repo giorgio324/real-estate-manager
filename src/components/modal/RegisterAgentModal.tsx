@@ -1,18 +1,21 @@
 import { Form, Formik } from 'formik';
 import Modal from './Modal';
 import { agentValidationSchema } from '../../schemas/agentValidationSchema';
-import { Agent, FinalAgent } from '../../types/agent';
 import { base64ToFile } from '../../utils/base64ToFile';
 import TextInput from '../textInput/TextInput';
 import ImageUpload from '../imageUpload/ImageUpload';
 import Button from '../button/Button';
 import { useModal } from '../../context/ModalContext';
 import { useCreateAgent } from '../../hooks/useCreateAgent';
+import {
+  CreateAgentFormFinalValues,
+  CreateAgentFormValues,
+} from '../../types/formValues';
 
 const RegisterAgentModal = () => {
   const { setIsOpen } = useModal();
   const { mutate } = useCreateAgent(setIsOpen);
-  const initialValues: Agent = {
+  const initialValues: CreateAgentFormValues = {
     avatar: localStorage.getItem('avatar'),
     email: localStorage.getItem('email') || '',
     name: localStorage.getItem('name') || '',
@@ -20,11 +23,11 @@ const RegisterAgentModal = () => {
     phone: localStorage.getItem('phone') || '',
   };
 
-  const handleSubmit = (data: Agent) => {
+  const handleSubmit = (data: CreateAgentFormValues) => {
     if (data.avatar) {
       const newImageFile = base64ToFile(data.avatar, 'uploaded-img');
       if (newImageFile) {
-        const transformedData: FinalAgent = {
+        const transformedData: CreateAgentFormFinalValues = {
           ...data,
           avatar: newImageFile,
         };
