@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useField } from 'formik';
 import dropdownIcon from '../../assets/images/DropdownIconDown.svg';
+import { useModal } from '../../context/ModalContext';
+import PlusIcon from '../../assets/images/ImagePlaceholder.svg';
 
 type Option<T> = {
   id: number;
@@ -16,6 +18,7 @@ type Props<T> = {
   onClick?: () => void;
   isLoading: boolean;
   error?: string;
+  createAgent?: boolean;
 };
 
 const Select = <T,>({
@@ -27,11 +30,12 @@ const Select = <T,>({
   label,
   onChange,
   onClick,
+  createAgent = false,
 }: Props<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [_field, meta] = useField<Option<T>>(name);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const { setIsOpen: setModalOpen } = useModal();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -49,7 +53,7 @@ const Select = <T,>({
   }, []);
 
   const handleClick = () => {
-    if (options?.length === 0) {
+    if (options?.length === 0 && !createAgent) {
       if (onClick) {
         onClick();
       }
@@ -62,6 +66,11 @@ const Select = <T,>({
     if (onChange) {
       onChange(item);
     }
+    setIsOpen(false);
+  };
+
+  const handleAgentAdd = () => {
+    setModalOpen(true);
     setIsOpen(false);
   };
 
@@ -88,6 +97,15 @@ const Select = <T,>({
       </div>
       {isOpen && (
         <div className='absolute bottom-0 transform translate-y-full left-0 rounded-bl-md rounded-br-md bg-white w-full z-10'>
+          {createAgent && (
+            <div
+              onClick={handleAgentAdd}
+              className='border bordermd border-silver px-[10px] py-[12px] w-full text-sm border-b-0 last:border-b last:rounded-bl-md last:rounded-br-md flex gap-2 items-center'
+            >
+              <img src={PlusIcon} alt='Add agent Icon' />
+              დაამატე აგენტი
+            </div>
+          )}
           {options?.map((item) => (
             <div
               key={item.id}

@@ -25,6 +25,7 @@ const SelectAgent = ({ agents, isLoading, error }: Props) => {
         name='agent'
         options={agents}
         onChange={handleAgentChange}
+        createAgent
       />
     </div>
   );

@@ -17,6 +17,7 @@ import {
 import SelectAgent from '../components/select/SelectAgent';
 import { useCreateRealEstate } from '../hooks/useCreateRealEstate';
 import { useNavigate } from 'react-router-dom';
+import RegisterAgentModal from '../components/modal/RegisterAgentModal';
 
 const Create = () => {
   const navigate = useNavigate();
@@ -208,6 +209,7 @@ const Create = () => {
           );
         }}
       </Formik>
+      <RegisterAgentModal />
     </div>
   );
 };

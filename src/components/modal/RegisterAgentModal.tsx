@@ -36,6 +36,15 @@ const RegisterAgentModal = () => {
     }
   };
 
+  const handleClose = () => {
+    localStorage.removeItem('avatar');
+    localStorage.removeItem('email');
+    localStorage.removeItem('name');
+    localStorage.removeItem('surname');
+    localStorage.removeItem('phone');
+    setIsOpen(false);
+  };
+
   return (
     <Modal>
       <h1 className='font-firago font-medium text-3xl text-center text-text'>
@@ -83,7 +92,7 @@ const RegisterAgentModal = () => {
               <Button
                 type='button'
                 className='border border-primary text-primary bg-white hover:bg-primary hover:text-white'
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
               >
                 გაუქმება
               </Button>
