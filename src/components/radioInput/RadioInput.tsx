@@ -17,18 +17,18 @@ const RadioInput = ({ label, name, value }: RadioInputProps) => {
   };
 
   return (
-    <div className='flex items-center gap-3 font-firago text-sm w-[134px]'>
+    <div className='flex items-center font-firago text-sm w-[134px]'>
       <input
         {...field}
         id={id}
         type='radio'
         onChange={handleChange}
         value={value}
-        className='w-[17px] h-[17px]'
+        className='w-[17px] h-[17px] cursor-pointer'
       />
       <label
         htmlFor={id}
-        className='pl-2 block text-sm font-medium text-gray-700'
+        className='pl-5 block text-sm font-medium text-gray-700 cursor-pointer'
       >
         {label}
       </label>

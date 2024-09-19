@@ -16,6 +16,10 @@ const TextInput = ({ label, name, hintText }: TextInputProps) => {
     helpers.setValue(e.target.value);
     localStorage.setItem(name, e.target.value);
   };
+
+  const handleFocus = () => {
+    helpers.setTouched(true, true);
+  };
   const touched = meta.touched;
   const error = meta.error;
   return (
@@ -27,6 +31,7 @@ const TextInput = ({ label, name, hintText }: TextInputProps) => {
         {...field}
         id={id}
         type='text'
+        onFocus={handleFocus}
         onChange={handleChange}
         className={`border mt-[5px] px-[10px] py-[12px] rounded-md shadow-sm w-full text-sm ${
           touched && error ? 'border-error' : 'border-silver'

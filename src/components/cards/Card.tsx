@@ -3,6 +3,7 @@ import sizeIcon from '../../assets/images/SizeIcon.svg';
 import postIcon from '../../assets/images/PostIcon.svg';
 import locationIcon from '../../assets/images/LocationIcon.svg';
 import { RealEstate } from '../../types/realEstate';
+import { Link } from 'react-router-dom';
 
 type Props = {
   realEstate: RealEstate;
@@ -21,7 +22,8 @@ const Card = ({ realEstate }: Props) => {
       .join('') + ' \u20BE';
 
   return (
-    <div
+    <Link
+      to={`/estate/${realEstate.id}`}
       key={realEstate.id}
       className='w-[384px] hover:shadow-cardShadow transition-all duration-300 rounded-[14px]'
     >
@@ -78,7 +80,7 @@ const Card = ({ realEstate }: Props) => {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

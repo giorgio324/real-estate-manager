@@ -103,11 +103,12 @@ const Create = () => {
         ლისტინგის დამატება
       </h1>
       <Formik
+        validateOnChange
         initialValues={initialValues}
         onSubmit={handleSubmit}
         validationSchema={listingValidationSchema}
       >
-        {({ values }) => {
+        {({ values, touched, errors }) => {
           const filteredCities = cities?.filter(
             (city) => city.region_id === values.region?.id
           );
@@ -203,6 +204,7 @@ const Create = () => {
                   დაამატე ლისტინგი
                 </Button>
               </div>
+              <pre>{JSON.stringify({ values, touched, errors }, null, 4)}</pre>
             </Form>
           );
         }}

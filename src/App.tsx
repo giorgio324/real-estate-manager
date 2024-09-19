@@ -10,6 +10,7 @@ import RootLayout from './layouts/RootLayout';
 import Create from './pages/Create';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ModalProvider } from './context/ModalContext';
+import RealEstate from './pages/RealEstate';
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
     <Route path='/' element={<RootLayout />}>
       <Route index element={<Home />} />
       <Route path='create' element={<Create />} />
+      <Route path='estate/:id' element={<RealEstate />} />
     </Route>
   )
 );
