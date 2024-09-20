@@ -12,6 +12,7 @@ import { useModal } from '../context/ModalContext';
 import ConfirmationModal from '../components/modal/ConfirmDeleteModal';
 import ImageTag from '../components/imageTag/ImageTag';
 import IconItem from '../components/iconItem/IconItem';
+import Slider from '../components/slider/Slider';
 const RealEstate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ const RealEstate = () => {
             <h1 className='font-firago font-bold text-5xl'>{price}</h1>
             <div className='mt-6 flex flex-col gap-4 font-firago text-silver'>
               <IconItem iconSrc={LocationIcon} altText='Location Icon'>
-                {data.city.name}, {data.address}
+                {data.city.region.name}, {data.address}
               </IconItem>
               <IconItem iconSrc={SizeIcon} altText='Area Icon'>
                 ფართი {data.area} მ
@@ -92,7 +93,7 @@ const RealEstate = () => {
                 <img
                   src={data.agent.avatar}
                   alt='agent avatar photo'
-                  className='w-[72px] h-[72px] rounded-full'
+                  className='w-[72px] h-[72px] rounded-full object-cover'
                 />
                 <div>
                   <h3 className='text-base text-text'>
@@ -121,6 +122,10 @@ const RealEstate = () => {
               </Button>
             </div>
           </div>
+        </section>
+        <section className='mt-[52px] font-firago text-text'>
+          <h2 className='text-3xl font-medium'>ბინები მსგავს ლოკაციაზე</h2>
+          <Slider region={data.city.region.name} id={data.id} />
         </section>
       </main>
       <ConfirmationModal id={id} />

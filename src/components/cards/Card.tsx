@@ -5,6 +5,7 @@ import locationIcon from '../../assets/images/LocationIcon.svg';
 import { RealEstate } from '../../types/realEstate';
 import { Link } from 'react-router-dom';
 import ImageTag from '../imageTag/ImageTag';
+import IconItem from '../iconItem/IconItem';
 
 type Props = {
   realEstate: RealEstate;
@@ -23,64 +24,55 @@ const Card = ({ realEstate }: Props) => {
       .join('') + ' \u20BE';
 
   return (
-    <Link
-      to={`/estate/${realEstate.id}`}
-      key={realEstate.id}
-      className='w-[384px] hover:shadow-cardShadow transition-all duration-300 rounded-[14px]'
-    >
-      <div className='relative rounded-tl-[14px] rounded-tr-[14px]'>
+    <Link className='group flex flex-col' to={`/estate/${realEstate.id}`}>
+      <div className='relative w-full rounded-tl-[18px] rounded-tr-[18px] overflow-hidden'>
         <img
           src={realEstate.image}
-          alt={`Estate in ${realEstate.city.name}`}
-          className='w-[384px] h-[307px] rounded-tl-[14px] rounded-tr-[14px]'
+          alt='Real estate image'
+          className='w-full h-full object-cover aspect-[4/3]'
         />
         <ImageTag is_rental={realEstate.is_rental} />
       </div>
-      <div className='font-firago py-[22px] px-[25px] border-l border-l-border border-r border-r-border border-b border-b-border rounded-bl-[14px] rounded-br-[14px]'>
-        <p className='leading-8 text-[28px] font-bold'>{price}</p>
-        <div className='flex text-secondaryText text-base font-firago items-center mt-[6px]'>
-          <img
-            src={locationIcon}
-            alt='Location Icon'
-            className='mr-1 w-[14px] h-[17px]'
-          />
-          <p>{`${realEstate.city.name}, ${realEstate.address}`}</p>
+      <div className='flex-grow group-hover:shadow-cardShadow w-full border py-[22px] px-[25px] rounded-bl-[18px] rounded-br-[18px] font-firago'>
+        <h1 className=' font-bold text-text text-[28px]'>{price}</h1>
+        <div className='mt-[6px] flex'>
+          <IconItem
+            iconSrc={locationIcon}
+            altText='Location Icon'
+            classname='text-base text-secondaryText'
+            iconClassname='w-[20px] h-[20px]'
+          >
+            {`${realEstate.city.region.name}, ${realEstate.address}`}
+          </IconItem>
         </div>
-        <div className='flex gap-8 mt-5'>
-          <p className='flex gap-[5px] text-base justify-center items-center text-secondaryText'>
-            <span>
-              <img
-                src={bedIcon}
-                alt='Room amount Icon'
-                className='w-[18px]  h-[18px]'
-              />
-            </span>
+        <div className='font-firago text-secondaryText flex gap-4 mt-5'>
+          <IconItem
+            iconSrc={bedIcon}
+            altText='bed icon'
+            classname='text-base'
+            iconClassname='w-[24px] h-[24px]'
+          >
             {realEstate.bedrooms}
-          </p>
-          <p className='flex gap-[5px] text-base justify-center items-center text-secondaryText'>
-            <span>
-              <img
-                src={sizeIcon}
-                alt='Area amount Icon'
-                className='w-[18px]  h-[18px]'
-              />
-            </span>
-            {realEstate.area}
-          </p>
-          <p className='flex gap-[5px] text-base justify-center items-center text-secondaryText'>
-            <span>
-              <img
-                src={postIcon}
-                alt='Postal Code Icon'
-                className='w-[18px]  h-[18px]'
-              />
-            </span>
-            {realEstate.zip_code}
-          </p>
+          </IconItem>
+          <IconItem
+            iconSrc={bedIcon}
+            altText='bed icon'
+            classname='text-base'
+            iconClassname='w-[24px] h-[24px]'
+          >
+            {realEstate.bedrooms}
+          </IconItem>
+          <IconItem
+            iconSrc={bedIcon}
+            altText='bed icon'
+            classname='text-base'
+            iconClassname='w-[24px] h-[24px]'
+          >
+            {realEstate.bedrooms}
+          </IconItem>
         </div>
       </div>
     </Link>
   );
 };
-
 export default Card;

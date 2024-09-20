@@ -16,7 +16,7 @@ const Cards = ({ realEstates }: Props) => {
     );
   }
   return (
-    <main className='mt-8 flex gap-5'>
+    <main className='my-8 grid grid-cols-[repeat(auto-fill,minmax(380px,1fr))] self-stretch gap-4'>
       {realEstates?.map((item: RealEstate) => (
         <Card key={item.id} realEstate={item} />
       ))}

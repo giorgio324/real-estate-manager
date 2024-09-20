@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateAgentFormFinalValues } from '../types/formValues';
 import { Agent } from '../types/agent';
 
@@ -33,6 +33,7 @@ const createAgent = async (
 export const useCreateAgent = (
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createAgent,
     onSuccess: () => {
@@ -41,6 +42,7 @@ export const useCreateAgent = (
       localStorage.removeItem('name');
       localStorage.removeItem('surname');
       localStorage.removeItem('phone');
+      queryClient.invalidateQueries({ queryKey: ['agents'] });
       setIsOpen(false);
     },
     onError: (error) => {
