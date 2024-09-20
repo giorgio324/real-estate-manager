@@ -50,7 +50,7 @@ const Card = ({ realEstate }: Props) => {
             iconSrc={bedIcon}
             altText='bed icon'
             classname='text-base'
-            iconClassname='w-[24px] h-[24px]'
+            iconClassname='w-[18px] h-[18px]'
           >
             {realEstate.bedrooms}
           </IconItem>
@@ -58,7 +58,7 @@ const Card = ({ realEstate }: Props) => {
             iconSrc={sizeIcon}
             altText='bed icon'
             classname='text-base'
-            iconClassname='w-[24px] h-[24px]'
+            iconClassname='w-[18px] h-[18px]'
           >
             {realEstate.area} მ<sup className='text-[10px] align-super'>2</sup>
           </IconItem>
@@ -66,7 +66,7 @@ const Card = ({ realEstate }: Props) => {
             iconSrc={postIcon}
             altText='bed icon'
             classname='text-base'
-            iconClassname='w-[24px] h-[24px]'
+            iconClassname='w-[18px] h-[18px]'
           >
             {realEstate.zip_code}
           </IconItem>

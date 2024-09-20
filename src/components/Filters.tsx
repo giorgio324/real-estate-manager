@@ -8,6 +8,7 @@ import { useModal } from '../context/ModalContext';
 import RegisterAgentModal from './modal/RegisterAgentModal';
 import { useRegionsData } from '../hooks/useRegionsData';
 import { Link } from 'react-router-dom';
+import NewDropdown from './dropdown/NewDropdown';
 
 type FilterValues = {
   region: {
@@ -21,11 +22,11 @@ type FilterValues = {
   };
 };
 
-type Props = {};
-
-const Filters = ({}: Props) => {
+const Filters = () => {
   const { setIsOpen } = useModal();
   const { data, error, isLoading } = useRegionsData();
+  const { filters, setFilters } = useFilter();
+
   const [localFilters, setLocalFilters] = useState<FilterValues>({
     price: { min: '', max: '' },
     region: [],
@@ -34,7 +35,6 @@ const Filters = ({}: Props) => {
     price: false,
     size: false,
   });
-  const { filters, setFilters } = useFilter();
 
   useEffect(() => {
     const savedFilters = localStorage.getItem('filters');
@@ -120,6 +120,48 @@ const Filters = ({}: Props) => {
 
   return (
     <>
+      <NewDropdown
+        dropdownTitle='რეგიონის მიხედვით'
+        buttonText='რეგიონი'
+        onSubmit={handleConfirmButtonClick}
+      >
+        <div className='flex w-[680px] flex-wrap gap-y-4 gap-x-[50px]'>
+          {localFilters.region.map((region) => (
+            <Checkbox
+              key={region.id}
+              name={region.name}
+              checked={region.checked}
+              onChange={handleCheckboxChange}
+            />
+          ))}
+        </div>
+      </NewDropdown>
+      <NewDropdown
+        dropdownTitle='ფასის მიხედვით'
+        buttonText='საფასო კატეგორია'
+        onSubmit={handlePriceConfirmClick}
+      >
+        <div className='flex w-[334px] gap-x-4'>
+          <NumberInput
+            placeholder='დან'
+            name='min'
+            value={localFilters.price.min as number}
+            onChange={handlePriceChange}
+          />
+          <NumberInput
+            placeholder='დან'
+            name='max'
+            value={localFilters.price.max as number}
+            onChange={handlePriceChange}
+          />
+        </div>
+
+        {filterErrors.price && (
+          <p className='mt-2 font-firago text-sm text-error'>
+            ჩაწერეთ ვალიდური მონაცემები
+          </p>
+        )}
+      </NewDropdown>
       <section className='flex justify-between'>
         <div className='flex flex-col'>
           <div className='flex shrink'>
@@ -181,7 +223,7 @@ const Filters = ({}: Props) => {
               })}
           </div>
         </div>
-        <div className='flex items-center gap-4 '>
+        <div className='flex items-center gap-4'>
           {/* svg-ის პირდაპირ შემოგდება მიწებს რადგან currentcolor არ აქვს შემოიმპორტირებისას... */}
           <Link to={'/create'}>
             <Button className='flex gap-[2px] items-center justify-center border border-primary text-white hover:text-white bg-primary hover:bg-primaryHover'>
