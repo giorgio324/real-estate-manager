@@ -1,5 +1,7 @@
 import Cards from '../components/cards/Cards';
+import Error from '../components/error/Error';
 import Filters from '../components/Filters';
+import Loading from '../components/loading/Loading';
 import { FilterProvider } from '../context/FilterContext';
 import { useRealEstatesData } from '../hooks/useRealEstateData';
 
@@ -7,15 +9,13 @@ const Home = () => {
   const { data, isLoading, error } = useRealEstatesData();
   if (isLoading)
     return (
-      <div className='mt-[77px]'>
-        <p className='text-secondary text-xl font-medium'>Loading Data...</p>
-      </div>
+      <Loading className='mt-[77px]'>
+        იტვირთება მონაცემები გთხოვთ დაელოდოთ...
+      </Loading>
     );
   if (error)
     return (
-      <div className='mt-[77px]'>
-        <p className='text-secondary'>{error.message}</p>
-      </div>
+      <Error className='mt-[77px]'>დაფიქსირდა შეცდობა {error.message}</Error>
     );
   return (
     <div className='mt-[77px]'>

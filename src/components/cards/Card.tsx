@@ -24,7 +24,7 @@ const Card = ({ realEstate }: Props) => {
       .join('') + ' \u20BE';
 
   return (
-    <Link className='group flex flex-col' to={`/estate/${realEstate.id}`}>
+    <Link className='group w-[380px]' to={`/estate/${realEstate.id}`}>
       <div className='relative w-full rounded-tl-[18px] rounded-tr-[18px] overflow-hidden'>
         <img
           src={realEstate.image}
@@ -33,7 +33,7 @@ const Card = ({ realEstate }: Props) => {
         />
         <ImageTag is_rental={realEstate.is_rental} />
       </div>
-      <div className='flex-grow group-hover:shadow-cardShadow w-full border py-[22px] px-[25px] rounded-bl-[18px] rounded-br-[18px] font-firago'>
+      <div className='group-hover:shadow-cardShadow w-full border py-[22px] px-[25px] rounded-bl-[18px] rounded-br-[18px] font-firago'>
         <h1 className=' font-bold text-text text-[28px]'>{price}</h1>
         <div className='mt-[6px] flex'>
           <IconItem
@@ -55,20 +55,20 @@ const Card = ({ realEstate }: Props) => {
             {realEstate.bedrooms}
           </IconItem>
           <IconItem
-            iconSrc={bedIcon}
+            iconSrc={sizeIcon}
             altText='bed icon'
             classname='text-base'
             iconClassname='w-[24px] h-[24px]'
           >
-            {realEstate.bedrooms}
+            {realEstate.area} მ<sup className='text-[10px] align-super'>2</sup>
           </IconItem>
           <IconItem
-            iconSrc={bedIcon}
+            iconSrc={postIcon}
             altText='bed icon'
             classname='text-base'
             iconClassname='w-[24px] h-[24px]'
           >
-            {realEstate.bedrooms}
+            {realEstate.zip_code}
           </IconItem>
         </div>
       </div>

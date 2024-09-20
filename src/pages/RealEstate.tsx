@@ -13,6 +13,8 @@ import ConfirmationModal from '../components/modal/ConfirmDeleteModal';
 import ImageTag from '../components/imageTag/ImageTag';
 import IconItem from '../components/iconItem/IconItem';
 import Slider from '../components/slider/Slider';
+import Loading from '../components/loading/Loading';
+import Error from '../components/error/Error';
 const RealEstate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -38,10 +40,23 @@ const RealEstate = () => {
     .map((char, index) => (index !== 0 && index % 3 === 0 ? ' ' + char : char))
     .join('');
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading real estate details</div>;
+  if (isLoading)
+    return (
+      <Loading className='pt-[64px]'>
+        იტვირთება მონაცემები გთხოვთ დაელოდოთ...
+      </Loading>
+    );
+  if (error)
+    return (
+      <Error className='pt-[64px]'>დაფიქსირდა შეცდობა {error.message}</Error>
+    );
 
-  if (!data) return <div>No real estate found</div>;
+  if (!data)
+    return (
+      <div className='pt-[64px] text-secondary text-xl font-medium'>
+        ასეთი საკუთრება ვერ მოიძებნა
+      </div>
+    );
 
   const date = new Date(data.created_at);
   const day = date.getUTCDate();
@@ -49,7 +64,7 @@ const RealEstate = () => {
   const year = date.getUTCFullYear() % 100;
   return (
     <>
-      <main className='mt-[64px] flex flex-col'>
+      <main className='pt-[64px] pb-[220px] flex flex-col'>
         <Link to='/' className='flex-shrink w-[32px] h-[32px]'>
           <img src={BackIcon} alt='Return to home Icon' />
         </Link>

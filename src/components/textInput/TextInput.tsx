@@ -20,6 +20,7 @@ const TextInput = ({ label, name, hintText }: TextInputProps) => {
   const handleFocus = () => {
     helpers.setTouched(true, true);
   };
+
   const touched = meta.touched;
   const error = meta.error;
   return (

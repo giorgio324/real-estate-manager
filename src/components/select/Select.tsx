@@ -91,7 +91,11 @@ const Select = <T,>({
             : 'rounded-md'
         } ${touched && error ? 'border-error' : 'border-silver'}`}
       >
-        {isLoading ? <p>loading...</p> : meta.value?.name || placeholder}
+        {isLoading ? (
+          <p>იტვირთება მონაცემები...</p>
+        ) : (
+          meta.value?.name || placeholder
+        )}
         {dataError && <p>{dataError}</p>}
         <img src={dropdownIcon} alt='dropdown icon' />
       </div>
