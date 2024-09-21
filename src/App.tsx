@@ -11,13 +11,21 @@ import Create from './pages/Create';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ModalProvider } from './context/ModalContext';
 import RealEstate from './pages/RealEstate';
+import { FilterProvider } from './context/FilterContext';
 
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<RootLayout />}>
-      <Route index element={<Home />} />
+      <Route
+        index
+        element={
+          <FilterProvider>
+            <Home />
+          </FilterProvider>
+        }
+      />
       <Route path='create' element={<Create />} />
       <Route path='estate/:id' element={<RealEstate />} />
     </Route>
