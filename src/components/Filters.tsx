@@ -8,14 +8,8 @@ import ActionButtons from './button/ActionButtons';
 import Loading from './loading/Loading';
 import Error from './error/Error';
 import PremadeButtons from './button/PremadeButtons';
-import { FilterValues } from '../types/filter';
+import { FilterErrors, FilterValues } from '../types/filter';
 import DropdownCheckboxes from './dropdown/DropdownCheckboxes';
-
-type FilterErrors = {
-  price: boolean;
-  area: boolean;
-  bedroom: boolean;
-};
 
 const Filters = () => {
   const { data, error, isLoading } = useRegionsData();
@@ -58,96 +52,54 @@ const Filters = () => {
     return <Loading>იტვირთება მონაცემები გთხოვთ დაელოდოთ...</Loading>;
   if (error) return <Error>დაფიქსირდა შეცდომა {error.message}</Error>;
 
-  const handlePriceSubmit = () => {
-    if (!localFilters.price.min || !localFilters.price.max) {
-      setLocalErros((prevState) => ({
+  const handleRangeSubmit = (type: 'price' | 'area') => {
+    if (!localFilters[type].min || !localFilters[type].max) {
+      setLocalErros((prevState: FilterErrors) => ({
         ...prevState,
-        price: true,
+        [type]: true,
       }));
       return;
     }
 
-    if (Number(localFilters.price.min) > Number(localFilters.price.max)) {
-      setLocalErros((prevState) => ({
+    if (Number(localFilters[type].min) > Number(localFilters[type].max)) {
+      setLocalErros((prevState: FilterErrors) => ({
         ...prevState,
-        price: true,
+        [type]: true,
       }));
       return;
     }
-    if (localErrors.price) return;
+
+    if (localErrors[type]) return;
+
     setFilters(localFilters);
     localStorage.setItem('filters', JSON.stringify(localFilters));
   };
 
-  const handleAreaConfirmClick = () => {
-    if (!localFilters.area.min || !localFilters.area.max) {
-      setLocalErros((prevState) => ({
-        ...prevState,
-        area: true,
-      }));
-      return;
-    }
-
-    if (Number(localFilters.area.min) > Number(localFilters.area.max)) {
-      setLocalErros((prevState) => ({
-        ...prevState,
-        area: true,
-      }));
-      return;
-    }
-    if (localErrors.area) return;
-    setFilters(localFilters);
-    localStorage.setItem('filters', JSON.stringify(localFilters));
-  };
-
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRangeChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: 'price' | 'area'
+  ) => {
     const { name, value } = e.target;
 
-    setLocalFilters((prevState) => {
-      const updatedPrice = {
-        ...prevState.price,
+    setLocalFilters((prevState: FilterValues) => {
+      const updatedRange = {
+        ...prevState[type],
         [name]: value,
       };
 
-      const minPrice = Number(updatedPrice.min);
-      const maxPrice = Number(updatedPrice.max);
+      const minValue = Number(updatedRange.min);
+      const maxValue = Number(updatedRange.max);
 
-      const hasError = minPrice >= maxPrice;
+      const hasError = minValue >= maxValue;
 
-      setLocalErros((prevErrors) => ({
+      setLocalErros((prevErrors: FilterErrors) => ({
         ...prevErrors,
-        price: hasError,
+        [type]: hasError,
       }));
 
       return {
         ...prevState,
-        price: updatedPrice,
-      };
-    });
-  };
-
-  const handleAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setLocalFilters((prevState) => {
-      const updatedArea = {
-        ...prevState.area,
-        [name]: value,
-      };
-
-      const minArea = Number(updatedArea.min);
-      const maxArea = Number(updatedArea.max);
-
-      const hasError = minArea >= maxArea;
-
-      setLocalErros((prevErrors) => ({
-        ...prevErrors,
-        area: hasError,
-      }));
-
-      return {
-        ...prevState,
-        area: updatedArea,
+        [type]: updatedRange,
       };
     });
   };
@@ -175,50 +127,30 @@ const Filters = () => {
     setFilters((prevStete) => ({ ...prevStete, region: updatedRegions }));
   };
 
-  const handlePremadePriceChange = (amount: number, name: 'min' | 'max') => {
-    setLocalFilters((prevState) => {
-      const updatedPrice = {
-        ...prevState.price,
-        [name]: amount,
+  const handlePremadeRangeChange = (
+    value: number,
+    type: 'price' | 'area',
+    name: 'min' | 'max'
+  ) => {
+    setLocalFilters((prevState: FilterValues) => {
+      const updatedRange = {
+        ...prevState[type],
+        [name]: value,
       };
 
-      const minPrice = Number(updatedPrice.min);
-      const maxPrice = Number(updatedPrice.max);
+      const minValue = Number(updatedRange.min);
+      const maxValue = Number(updatedRange.max);
 
-      const hasError = minPrice >= maxPrice;
+      const hasError = minValue >= maxValue;
 
-      setLocalErros((prevErrors) => ({
+      setLocalErros((prevErrors: FilterErrors) => ({
         ...prevErrors,
-        price: hasError,
+        [type]: hasError,
       }));
 
       return {
         ...prevState,
-        price: updatedPrice,
-      };
-    });
-  };
-
-  const handlePremadeAreaChange = (amount: number, name: 'min' | 'max') => {
-    setLocalFilters((prevState) => {
-      const updatedArea = {
-        ...prevState.area,
-        [name]: amount,
-      };
-
-      const minArea = Number(updatedArea.min);
-      const maxArea = Number(updatedArea.max);
-
-      const hasError = minArea >= maxArea;
-
-      setLocalErros((prevErrors) => ({
-        ...prevErrors,
-        area: hasError,
-      }));
-
-      return {
-        ...prevState,
-        area: updatedArea,
+        [type]: updatedRange,
       };
     });
   };
@@ -238,7 +170,7 @@ const Filters = () => {
               <Dropdown
                 dropdownTitle='ფასის მიხედვით'
                 buttonText='საფასო კატეგორია'
-                onSubmit={handlePriceSubmit}
+                onSubmit={() => handleRangeSubmit('price')}
                 error={localErrors.price}
               >
                 <div className='w-[334px]'>
@@ -248,14 +180,14 @@ const Filters = () => {
                       name='min'
                       value={localFilters.price.min}
                       icon={<>{'\u20BE'}</>}
-                      onChange={handlePriceChange}
+                      onChange={(e) => handleRangeChange(e, 'price')}
                     />
                     <NumberInput
                       placeholder='დან'
                       name='max'
                       value={localFilters.price.max}
                       icon={<>{'\u20BE'}</>}
-                      onChange={handlePriceChange}
+                      onChange={(e) => handleRangeChange(e, 'price')}
                     />
                   </div>
                   {localErrors.price && (
@@ -267,14 +199,16 @@ const Filters = () => {
                     <PremadeButtons
                       name='min'
                       premadeValues={premadePrices}
-                      onClick={handlePremadePriceChange}
+                      type='price'
+                      onClick={handlePremadeRangeChange}
                       title='მინ. ფასი'
                       icon={<>{'\u20BE'}</>}
                     />
                     <PremadeButtons
                       name='max'
                       premadeValues={premadePrices}
-                      onClick={handlePremadePriceChange}
+                      onClick={handlePremadeRangeChange}
+                      type='price'
                       title='მაქს. ფასი'
                       icon={<>{'\u20BE'}</>}
                     />
@@ -284,7 +218,7 @@ const Filters = () => {
               <Dropdown
                 dropdownTitle='ფართობის მიხედვით'
                 buttonText='ფართობი'
-                onSubmit={handleAreaConfirmClick}
+                onSubmit={() => handleRangeSubmit('area')}
                 error={localErrors.area}
               >
                 <div className='w-[334px]'>
@@ -293,15 +227,23 @@ const Filters = () => {
                       placeholder='დან'
                       name='min'
                       value={localFilters.area.min}
-                      icon={<>{'\u20BE'}</>}
-                      onChange={handleAreaChange}
+                      icon={
+                        <>
+                          მ<sup className='text-[10px] align-super'>2</sup>
+                        </>
+                      }
+                      onChange={(e) => handleRangeChange(e, 'area')}
                     />
                     <NumberInput
                       placeholder='დან'
                       name='max'
                       value={localFilters.area.max}
-                      icon={<>{'\u20BE'}</>}
-                      onChange={handleAreaChange}
+                      icon={
+                        <>
+                          მ<sup className='text-[10px] align-super'>2</sup>
+                        </>
+                      }
+                      onChange={(e) => handleRangeChange(e, 'area')}
                     />
                   </div>
                   {localErrors.area && (
@@ -313,7 +255,8 @@ const Filters = () => {
                     <PremadeButtons
                       name='min'
                       premadeValues={premadeAreas}
-                      onClick={handlePremadeAreaChange}
+                      onClick={handlePremadeRangeChange}
+                      type='area'
                       title='მინ. ფასი'
                       icon={
                         <>
@@ -324,7 +267,8 @@ const Filters = () => {
                     <PremadeButtons
                       name='max'
                       premadeValues={premadeAreas}
-                      onClick={handlePremadeAreaChange}
+                      onClick={handlePremadeRangeChange}
+                      type='area'
                       title='მაქს. ფასი'
                       icon={
                         <>

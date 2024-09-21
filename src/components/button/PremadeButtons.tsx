@@ -1,9 +1,10 @@
 type Props = {
   title: string;
   premadeValues: number[];
-  onClick: (value: number, name: 'min' | 'max') => void;
+  onClick: (value: number, type: 'price' | 'area', name: 'min' | 'max') => void;
   icon: React.ReactNode;
   name: 'min' | 'max';
+  type: 'price' | 'area';
 };
 const PremadeButtons = ({
   onClick,
@@ -11,6 +12,7 @@ const PremadeButtons = ({
   title,
   icon,
   name,
+  type,
 }: Props) => {
   return (
     <div className='flex flex-col items-start w-full'>
@@ -19,7 +21,7 @@ const PremadeButtons = ({
         {premadeValues.map((value) => (
           <button
             key={value}
-            onClick={() => onClick(value, name)}
+            onClick={() => onClick(value, type, name)}
             className={'text-filterText mt-2'}
           >
             {value.toLocaleString()} {icon}

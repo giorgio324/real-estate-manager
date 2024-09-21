@@ -14,3 +14,9 @@ export type FilterValues = {
   };
   bedroom: string;
 };
+
+export type FilterErrors = {
+  price: boolean;
+  area: boolean;
+  bedroom: boolean;
+};
