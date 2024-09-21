@@ -13,6 +13,7 @@ type Props = {
   validateOnBlur?: (value: string) => void;
   validateOnChange?: (value: string) => void;
   className?: string;
+  icon?: React.ReactNode;
 };
 
 const NumberInput = ({
@@ -25,6 +26,7 @@ const NumberInput = ({
   className,
   validateOnBlur,
   validateOnChange,
+  icon,
 }: Props) => {
   const id = useId();
 
@@ -50,7 +52,7 @@ const NumberInput = ({
       )}
       <div className='relative'>
         <span className='absolute top-1/2 right-[14px] transform -translate-y-1/2 text-sm'>
-          {'\u20BE'}
+          {icon}
         </span>
         <input
           type='number'

@@ -1,5 +1,4 @@
 import { useFilter } from '../context/FilterContext';
-import Checkbox from './checkbox/Checkbox';
 import { useEffect, useState } from 'react';
 import NumberInput from './numberInput/NumberInput';
 import RegisterAgentModal from './modal/RegisterAgentModal';
@@ -8,23 +7,9 @@ import Dropdown from './dropdown/Dropdown';
 import ActionButtons from './button/ActionButtons';
 import Loading from './loading/Loading';
 import Error from './error/Error';
-
-type FilterValues = {
-  region: {
-    id: number;
-    name: string;
-    checked: boolean;
-  }[];
-  price: {
-    min: string;
-    max: string;
-  };
-  area: {
-    min: string;
-    max: string;
-  };
-  bedroom: string;
-};
+import PremadeButtons from './button/PremadeButtons';
+import { FilterValues } from '../types/filter';
+import DropdownCheckboxes from './dropdown/DropdownCheckboxes';
 
 type FilterErrors = {
   price: boolean;
@@ -48,9 +33,6 @@ const Filters = () => {
     bedroom: false,
     price: false,
   });
-
-  console.log(localFilters.price);
-  console.log(localErrors);
 
   /* this useffect initilizes local filter regions to look like a object {id,name,checked} */
   useEffect(() => {
@@ -76,12 +58,7 @@ const Filters = () => {
     return <Loading>იტვირთება მონაცემები გთხოვთ დაელოდოთ...</Loading>;
   if (error) return <Error>დაფიქსირდა შეცდომა {error.message}</Error>;
 
-  const handleRegionSubmit = () => {
-    setFilters(localFilters);
-    localStorage.setItem('filters', JSON.stringify(localFilters));
-  };
-
-  const handlePriceConfirmClick = () => {
+  const handlePriceSubmit = () => {
     if (!localFilters.price.min || !localFilters.price.max) {
       setLocalErros((prevState) => ({
         ...prevState,
@@ -102,15 +79,25 @@ const Filters = () => {
     localStorage.setItem('filters', JSON.stringify(localFilters));
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
+  const handleAreaConfirmClick = () => {
+    if (!localFilters.area.min || !localFilters.area.max) {
+      setLocalErros((prevState) => ({
+        ...prevState,
+        area: true,
+      }));
+      return;
+    }
 
-    setLocalFilters((prevState) => ({
-      ...prevState,
-      region: prevState.region.map((region) =>
-        region.name === name ? { ...region, checked } : region
-      ),
-    }));
+    if (Number(localFilters.area.min) > Number(localFilters.area.max)) {
+      setLocalErros((prevState) => ({
+        ...prevState,
+        area: true,
+      }));
+      return;
+    }
+    if (localErrors.area) return;
+    setFilters(localFilters);
+    localStorage.setItem('filters', JSON.stringify(localFilters));
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,6 +126,32 @@ const Filters = () => {
     });
   };
 
+  const handleAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setLocalFilters((prevState) => {
+      const updatedArea = {
+        ...prevState.area,
+        [name]: value,
+      };
+
+      const minArea = Number(updatedArea.min);
+      const maxArea = Number(updatedArea.max);
+
+      const hasError = minArea >= maxArea;
+
+      setLocalErros((prevErrors) => ({
+        ...prevErrors,
+        area: hasError,
+      }));
+
+      return {
+        ...prevState,
+        area: updatedArea,
+      };
+    });
+  };
+
   const handleRegionDelete = (checkedRegion: {
     id: number;
     name: string;
@@ -151,57 +164,176 @@ const Filters = () => {
       return region;
     });
 
-    setLocalFilters({ ...localFilters, region: updatedRegions });
+    setLocalFilters((prevState) => {
+      const updatedFilters = {
+        ...prevState,
+        region: updatedRegions,
+      };
+      localStorage.setItem('filters', JSON.stringify(updatedFilters));
+      return updatedFilters;
+    });
     setFilters((prevStete) => ({ ...prevStete, region: updatedRegions }));
   };
 
+  const handlePremadePriceChange = (amount: number, name: 'min' | 'max') => {
+    setLocalFilters((prevState) => {
+      const updatedPrice = {
+        ...prevState.price,
+        [name]: amount,
+      };
+
+      const minPrice = Number(updatedPrice.min);
+      const maxPrice = Number(updatedPrice.max);
+
+      const hasError = minPrice >= maxPrice;
+
+      setLocalErros((prevErrors) => ({
+        ...prevErrors,
+        price: hasError,
+      }));
+
+      return {
+        ...prevState,
+        price: updatedPrice,
+      };
+    });
+  };
+
+  const handlePremadeAreaChange = (amount: number, name: 'min' | 'max') => {
+    setLocalFilters((prevState) => {
+      const updatedArea = {
+        ...prevState.area,
+        [name]: amount,
+      };
+
+      const minArea = Number(updatedArea.min);
+      const maxArea = Number(updatedArea.max);
+
+      const hasError = minArea >= maxArea;
+
+      setLocalErros((prevErrors) => ({
+        ...prevErrors,
+        area: hasError,
+      }));
+
+      return {
+        ...prevState,
+        area: updatedArea,
+      };
+    });
+  };
+
+  const premadePrices = [50000, 100000, 150000, 200000, 300000];
+  const premadeAreas = [50, 100, 150, 200, 300];
   return (
     <>
       <section className='flex justify-between'>
         <div className='flex flex-col'>
           <div className='flex shrink'>
             <div className='border border-border rounded-xl p-[6px] font-firago font-medium flex gap-4'>
-              <Dropdown
-                dropdownTitle='რეგიონის მიხედვით'
-                buttonText='რეგიონი'
-                onSubmit={handleRegionSubmit}
-              >
-                <div className='flex w-[680px] flex-wrap gap-y-4 gap-x-[50px]'>
-                  {localFilters.region.map((region) => (
-                    <Checkbox
-                      key={region.id}
-                      name={region.name}
-                      checked={region.checked}
-                      onChange={handleCheckboxChange}
-                    />
-                  ))}
-                </div>
-              </Dropdown>
+              <DropdownCheckboxes
+                localFilters={localFilters}
+                setLocalFilters={setLocalFilters}
+              />
               <Dropdown
                 dropdownTitle='ფასის მიხედვით'
                 buttonText='საფასო კატეგორია'
-                onSubmit={handlePriceConfirmClick}
+                onSubmit={handlePriceSubmit}
                 error={localErrors.price}
               >
-                <div className='flex w-[334px] gap-x-4'>
-                  <NumberInput
-                    placeholder='დან'
-                    name='min'
-                    value={localFilters.price.min}
-                    onChange={handlePriceChange}
-                  />
-                  <NumberInput
-                    placeholder='დან'
-                    name='max'
-                    value={localFilters.price.max}
-                    onChange={handlePriceChange}
-                  />
+                <div className='w-[334px]'>
+                  <div className='flex gap-x-4'>
+                    <NumberInput
+                      placeholder='დან'
+                      name='min'
+                      value={localFilters.price.min}
+                      icon={<>{'\u20BE'}</>}
+                      onChange={handlePriceChange}
+                    />
+                    <NumberInput
+                      placeholder='დან'
+                      name='max'
+                      value={localFilters.price.max}
+                      icon={<>{'\u20BE'}</>}
+                      onChange={handlePriceChange}
+                    />
+                  </div>
+                  {localErrors.price && (
+                    <p className='mt-2 font-firago text-sm text-error'>
+                      ჩაწერეთ ვალიდური მონაცემები
+                    </p>
+                  )}
+                  <div className='mt-6 font-firago text-sm flex justify-start gap-6'>
+                    <PremadeButtons
+                      name='min'
+                      premadeValues={premadePrices}
+                      onClick={handlePremadePriceChange}
+                      title='მინ. ფასი'
+                      icon={<>{'\u20BE'}</>}
+                    />
+                    <PremadeButtons
+                      name='max'
+                      premadeValues={premadePrices}
+                      onClick={handlePremadePriceChange}
+                      title='მაქს. ფასი'
+                      icon={<>{'\u20BE'}</>}
+                    />
+                  </div>
                 </div>
-                {localErrors.price && (
-                  <p className='mt-2 font-firago text-sm text-error'>
-                    ჩაწერეთ ვალიდური მონაცემები
-                  </p>
-                )}
+              </Dropdown>
+              <Dropdown
+                dropdownTitle='ფართობის მიხედვით'
+                buttonText='ფართობი'
+                onSubmit={handleAreaConfirmClick}
+                error={localErrors.area}
+              >
+                <div className='w-[334px]'>
+                  <div className='flex gap-x-4'>
+                    <NumberInput
+                      placeholder='დან'
+                      name='min'
+                      value={localFilters.area.min}
+                      icon={<>{'\u20BE'}</>}
+                      onChange={handleAreaChange}
+                    />
+                    <NumberInput
+                      placeholder='დან'
+                      name='max'
+                      value={localFilters.area.max}
+                      icon={<>{'\u20BE'}</>}
+                      onChange={handleAreaChange}
+                    />
+                  </div>
+                  {localErrors.area && (
+                    <p className='mt-2 font-firago text-sm text-error'>
+                      ჩაწერეთ ვალიდური მონაცემები
+                    </p>
+                  )}
+                  <div className='mt-6 font-firago text-sm flex justify-start gap-6'>
+                    <PremadeButtons
+                      name='min'
+                      premadeValues={premadeAreas}
+                      onClick={handlePremadeAreaChange}
+                      title='მინ. ფასი'
+                      icon={
+                        <>
+                          მ<sup className='text-[10px] align-super'>2</sup>
+                        </>
+                      }
+                    />
+                    <PremadeButtons
+                      name='max'
+                      premadeValues={premadeAreas}
+                      onClick={handlePremadeAreaChange}
+                      title='მაქს. ფასი'
+                      icon={
+                        <>
+                          მ<sup className='text-[10px] align-super'>2</sup>
+                        </>
+                      }
+                    />
+                  </div>
+                </div>
               </Dropdown>
             </div>
           </div>
@@ -213,6 +345,7 @@ const Filters = () => {
               .map((checkedRegion) => {
                 return (
                   <button
+                    key={checkedRegion.id}
                     className='border rounded-full flex p-1'
                     onClick={() => handleRegionDelete(checkedRegion)}
                   >
