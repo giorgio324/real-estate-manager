@@ -51,9 +51,11 @@ const NumberInput = ({
         </label>
       )}
       <div className='relative'>
-        <span className='absolute top-1/2 right-[14px] transform -translate-y-1/2 text-sm'>
-          {icon}
-        </span>
+        {icon && (
+          <span className='absolute top-1/2 right-[14px] transform -translate-y-1/2 text-sm'>
+            {icon}
+          </span>
+        )}
         <input
           type='number'
           name={name}

@@ -171,6 +171,57 @@ const Filters = () => {
     }));
   };
 
+  const handleBedroomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setLocalFilters((prevState: FilterValues) => {
+      const updatedBedroom = value;
+
+      const hasError = Number(updatedBedroom) <= 0;
+
+      setLocalErros((prevErrors: FilterErrors) => ({
+        ...prevErrors,
+        bedroom: hasError,
+      }));
+
+      return {
+        ...prevState,
+        bedroom: updatedBedroom,
+      };
+    });
+  };
+
+  const handleBedroomSubmit = () => {
+    if (!localFilters.bedroom || Number(localFilters.bedroom) <= 0) {
+      setLocalErros((prevState: FilterErrors) => ({
+        ...prevState,
+        bedroom: true,
+      }));
+      return;
+    }
+
+    if (localErrors.bedroom) return;
+
+    setFilters(localFilters);
+    localStorage.setItem('filters', JSON.stringify(localFilters));
+  };
+
+  const handleBedroomDelete = () => {
+    setLocalFilters((prevState: FilterValues) => {
+      const updatedFilters = {
+        ...prevState,
+        bedroom: '',
+      };
+      localStorage.setItem('filters', JSON.stringify(updatedFilters));
+      return updatedFilters;
+    });
+
+    setFilters((prevState) => ({
+      ...prevState,
+      bedroom: '',
+    }));
+  };
+
   const premadePrices = [50000, 100000, 150000, 200000, 300000];
   const premadeAreas = [50, 100, 150, 200, 300];
 
@@ -296,6 +347,29 @@ const Filters = () => {
                   </div>
                 </div>
               </Dropdown>
+              <Dropdown
+                dropdownTitle='საძინებლების რაოდენობა'
+                buttonText='საძინებლების რაოდენობა'
+                onSubmit={handleBedroomSubmit}
+                error={localErrors.bedroom}
+              >
+                <div className='w-[334px]'>
+                  <div className='flex gap-x-4'>
+                    <NumberInput
+                      placeholder='2'
+                      name='bedroom'
+                      value={localFilters.bedroom}
+                      className='w-[42px] h-[42px] pr-2 text-center'
+                      onChange={handleBedroomChange}
+                    />
+                  </div>
+                  {localErrors.bedroom && (
+                    <p className='mt-2 font-firago text-sm text-error'>
+                      ჩაწერეთ ვალიდური მონაცემები
+                    </p>
+                  )}
+                </div>
+              </Dropdown>
             </div>
           </div>
         </div>
@@ -355,6 +429,20 @@ const Filters = () => {
               </p>
             </div>
             <button onClick={() => handleRangeDelete('area')}>
+              <img
+                src={closeIcon}
+                alt={`delete price filter`}
+                className='w-[14px] h-[14px]'
+              />
+            </button>
+          </div>
+        )}
+        {filters.bedroom && (
+          <div className='border rounded-[43px] flex gap-1 p-1 py-[6px] px-[10px] items-center font-firago text-sm'>
+            <div className='flex gap-2'>
+              <p>{filters.bedroom}</p>
+            </div>
+            <button onClick={handleBedroomDelete}>
               <img
                 src={closeIcon}
                 alt={`delete price filter`}
