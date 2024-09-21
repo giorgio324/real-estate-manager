@@ -15,6 +15,7 @@ import IconItem from '../components/iconItem/IconItem';
 import Slider from '../components/slider/Slider';
 import Loading from '../components/loading/Loading';
 import Error from '../components/error/Error';
+
 const RealEstate = () => {
   const { id } = useParams();
   const navigate = useNavigate();

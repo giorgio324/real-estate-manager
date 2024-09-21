@@ -6,6 +6,7 @@ import { useFilter } from '../context/FilterContext';
 import { useRealEstatesData } from '../hooks/useRealEstateData';
 
 const Home = () => {
+  /* TODO: საძინებლების დროპდაუნი დააპატარავე, კარუსელი გააკეთე */
   const { data, isLoading, error } = useRealEstatesData();
   const { filters } = useFilter();
   let filteredRealEstates = data;

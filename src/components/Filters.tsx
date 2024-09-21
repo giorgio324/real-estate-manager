@@ -353,7 +353,7 @@ const Filters = () => {
                 onSubmit={handleBedroomSubmit}
                 error={localErrors.bedroom}
               >
-                <div className='w-[334px]'>
+                <div className='w-[282px]'>
                   <div className='flex gap-x-4'>
                     <NumberInput
                       placeholder='2'
