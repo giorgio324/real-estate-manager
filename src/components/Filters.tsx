@@ -10,7 +10,7 @@ import Error from './error/Error';
 import PremadeButtons from './button/PremadeButtons';
 import { FilterErrors, FilterValues } from '../types/filter';
 import DropdownCheckboxes from './dropdown/DropdownCheckboxes';
-
+import closeIcon from '../assets/images/CloseIcon2.svg';
 const Filters = () => {
   const { data, error, isLoading } = useRegionsData();
   const { filters, setFilters } = useFilter();
@@ -104,29 +104,6 @@ const Filters = () => {
     });
   };
 
-  const handleRegionDelete = (checkedRegion: {
-    id: number;
-    name: string;
-    checked: boolean;
-  }) => {
-    const updatedRegions = localFilters.region.map((region) => {
-      if (region.id === checkedRegion.id) {
-        return { ...region, checked: false };
-      }
-      return region;
-    });
-
-    setLocalFilters((prevState) => {
-      const updatedFilters = {
-        ...prevState,
-        region: updatedRegions,
-      };
-      localStorage.setItem('filters', JSON.stringify(updatedFilters));
-      return updatedFilters;
-    });
-    setFilters((prevStete) => ({ ...prevStete, region: updatedRegions }));
-  };
-
   const handlePremadeRangeChange = (
     value: number,
     type: 'price' | 'area',
@@ -155,8 +132,48 @@ const Filters = () => {
     });
   };
 
+  const handleRegionDelete = (checkedRegion: {
+    id: number;
+    name: string;
+    checked: boolean;
+  }) => {
+    const updatedRegions = localFilters.region.map((region) => {
+      if (region.id === checkedRegion.id) {
+        return { ...region, checked: false };
+      }
+      return region;
+    });
+
+    setLocalFilters((prevState) => {
+      const updatedFilters = {
+        ...prevState,
+        region: updatedRegions,
+      };
+      localStorage.setItem('filters', JSON.stringify(updatedFilters));
+      return updatedFilters;
+    });
+    setFilters((prevStete) => ({ ...prevStete, region: updatedRegions }));
+  };
+
+  const handleRangeDelete = (type: 'area' | 'price') => {
+    setLocalFilters((prevState) => {
+      const updatedFilters = {
+        ...prevState,
+        [type]: { min: '', max: '' },
+      };
+      localStorage.setItem('filters', JSON.stringify(updatedFilters));
+      return updatedFilters;
+    });
+
+    setFilters((prevState) => ({
+      ...prevState,
+      [type]: { min: '', max: '' },
+    }));
+  };
+
   const premadePrices = [50000, 100000, 150000, 200000, 300000];
   const premadeAreas = [50, 100, 150, 200, 300];
+
   return (
     <>
       <section className='flex justify-between'>
@@ -281,28 +298,72 @@ const Filters = () => {
               </Dropdown>
             </div>
           </div>
-          {/* this is where i display token of result and where user can reset the fields */}
-          <div>
-            {/* this needs to be filter not map i only need to display what is checked */}
-            {filters.region
-              .filter((region) => region.checked)
-              .map((checkedRegion) => {
-                return (
-                  <button
-                    key={checkedRegion.id}
-                    className='border rounded-full flex p-1'
-                    onClick={() => handleRegionDelete(checkedRegion)}
-                  >
-                    <p key={checkedRegion.id}>{checkedRegion.name}</p>X
-                  </button>
-                );
-              })}
-            <p>{filters.price.min}</p>
-            <p>{filters.price.max}</p>
-          </div>
         </div>
         <ActionButtons />
       </section>
+      <div className='flex mt-4 gap-2 flex-wrap'>
+        {filters.region
+          .filter((region) => region.checked)
+          .map((checkedRegion) => {
+            return (
+              <div
+                key={checkedRegion.id}
+                className='border rounded-[43px] flex p-1 py-[6px] px-[10px] items-center font-firago text-sm'
+              >
+                <p>{checkedRegion.name}</p>
+                <button onClick={() => handleRegionDelete(checkedRegion)}>
+                  <img
+                    src={closeIcon}
+                    alt={`delete filter by region ${checkedRegion.name}`}
+                    className='w-[14px] h-[14px]'
+                  />
+                </button>
+              </div>
+            );
+          })}
+        {filters.price.min && filters.price.max && (
+          <div className='border rounded-[43px] flex gap-1 p-1 py-[6px] px-[10px] items-center font-firago text-sm'>
+            <div className='flex gap-2 font-firago'>
+              <p>
+                {filters.price.min}
+                {'\u20BE'}
+              </p>
+              <p>-</p>
+              <p>
+                {filters.price.max}
+                {'\u20BE'}
+              </p>
+            </div>
+            <button onClick={() => handleRangeDelete('price')}>
+              <img
+                src={closeIcon}
+                alt={`delete price filter`}
+                className='w-[14px] h-[14px]'
+              />
+            </button>
+          </div>
+        )}
+        {filters.area.min && filters.area.max && (
+          <div className='border rounded-[43px] flex gap-1 p-1 py-[6px] px-[10px] items-center font-firago text-sm'>
+            <div className='flex gap-2'>
+              <p>
+                {filters.area.min}მ<sup className='text-[10px] '>2</sup>
+              </p>
+              <p>-</p>
+              <p>
+                {filters.area.max}მ<sup className='text-[10px]'>2</sup>
+              </p>
+            </div>
+            <button onClick={() => handleRangeDelete('area')}>
+              <img
+                src={closeIcon}
+                alt={`delete price filter`}
+                className='w-[14px] h-[14px]'
+              />
+            </button>
+          </div>
+        )}
+      </div>
       <RegisterAgentModal />
     </>
   );
