@@ -7,9 +7,14 @@ type FilterValues = {
     checked: boolean;
   }[];
   price: {
-    min: number | string;
-    max: number | string;
+    min: string;
+    max: string;
   };
+  area: {
+    min: string;
+    max: string;
+  };
+  bedroom: string;
 };
 
 type FilterContextType = {
@@ -27,18 +32,37 @@ export const useFilter = () => {
   return context;
 };
 
-interface FilterProviderProps {
-  children: React.ReactNode;
-}
+export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
+  const savedFilters = localStorage.getItem('filters');
+  const parsedFilters: FilterValues = savedFilters
+    ? JSON.parse(savedFilters)
+    : {
+        price: { min: '', max: '' },
+        region: [],
+        area: { min: '', max: '' },
+        bedroom: '',
+      };
 
-export const FilterProvider = ({ children }: FilterProviderProps) => {
   const [filters, setFilters] = useState<FilterValues>({
-    price: { min: 0, max: 10000 },
-    region: [],
+    price: {
+      min: parsedFilters.price.min || '',
+      max: parsedFilters.price.max || '',
+    },
+    region: parsedFilters.region || [],
+    area: {
+      min: parsedFilters.area.min || '',
+      max: parsedFilters.area.max || '',
+    },
+    bedroom: parsedFilters.bedroom || '',
   });
 
   return (
-    <FilterContext.Provider value={{ filters, setFilters }}>
+    <FilterContext.Provider
+      value={{
+        filters,
+        setFilters,
+      }}
+    >
       {children}
     </FilterContext.Provider>
   );

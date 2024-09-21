@@ -1,17 +1,17 @@
-import { useId, useState } from 'react';
+import { useId } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type Props = {
   name: string;
-  value: number;
+  value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
   disabled?: boolean;
   placeholder?: string;
   errorMessage?: string;
   displayMessage?: boolean;
-  validateOnBlur?: (value: number) => void;
-  validateOnChange?: (value: number) => void;
+  validateOnBlur?: (value: string) => void;
+  validateOnChange?: (value: string) => void;
   className?: string;
 };
 
@@ -19,7 +19,6 @@ const NumberInput = ({
   label,
   name,
   placeholder,
-  displayMessage = true,
   errorMessage,
   onChange,
   value,
@@ -27,21 +26,19 @@ const NumberInput = ({
   validateOnBlur,
   validateOnChange,
 }: Props) => {
-  const [touched, setTouched] = useState(false);
   const id = useId();
 
   const handleBlur = () => {
-    setTouched(true);
     if (validateOnBlur) {
       validateOnBlur(value);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e);
     if (validateOnChange) {
-      validateOnChange(Number(e.target.value));
+      validateOnChange(e.target.value);
     }
+    onChange(e);
   };
 
   return (
@@ -71,12 +68,6 @@ const NumberInput = ({
           )}
         />
       </div>
-      {touched && errorMessage && displayMessage && (
-        <p className={`${errorMessage ? 'text-error ' : ''}`}>error</p>
-      )}
-      {touched && !errorMessage && displayMessage && (
-        <p className={`${errorMessage ? 'text-valid ' : ''}`}>error</p>
-      )}
     </div>
   );
 };
